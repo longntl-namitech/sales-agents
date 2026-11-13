@@ -4,54 +4,264 @@
   "meta": {
     "title": "Outbound path through the agents",
     "quality_profile": "showcase",
+    "viewBox": [
+      1112,
+      652
+    ],
     "output": "docs/architecture.html"
   },
   "lanes": [
-    { "id": "input", "label": "Input" },
-    { "id": "agents", "label": "Agents" },
-    { "id": "safety", "label": "Safety and approval", "variant": "exception" },
-    { "id": "data", "label": "Data and tools" }
+    {
+      "id": "sup",
+      "label": "Orchestrator"
+    },
+    {
+      "id": "agents",
+      "label": "Subagents"
+    },
+    {
+      "id": "tools",
+      "label": "Tools and checks"
+    },
+    {
+      "id": "ext",
+      "label": "External"
+    }
   ],
-  "mainPath": ["lead", "supervisor", "researcher", "qualifier", "writer", "guardrail", "approval", "crm_agent", "crm_mock"],
   "nodes": [
-    { "id": "lead", "lane": "input", "col": 0, "type": "external", "label": "Lead", "sublabel": "synthetic account", "width": 132 },
-    { "id": "supervisor", "lane": "agents", "col": 0, "type": "backend", "label": "Supervisor", "sublabel": "Deep Agent", "width": 132 },
-    { "id": "researcher", "lane": "agents", "col": 1, "type": "backend", "label": "Researcher", "sublabel": "enriches the lead", "width": 132 },
-    { "id": "qualifier", "lane": "agents", "col": 2, "type": "backend", "label": "Qualifier", "sublabel": "hot, warm or cold", "width": 132 },
-    { "id": "writer", "lane": "agents", "col": 3, "type": "backend", "label": "Writer", "sublabel": "drafts the email", "width": 132 },
-    { "id": "guardrail", "lane": "safety", "col": 3, "type": "security", "label": "Guardrail", "sublabel": "checks the draft", "width": 132 },
-    { "id": "approval", "lane": "safety", "col": 4, "type": "security", "label": "Human approval", "sublabel": "nothing sends without it", "width": 132 },
-    { "id": "crm_agent", "lane": "agents", "col": 5, "type": "backend", "label": "CRM agent", "sublabel": "records the outcome", "width": 132 },
-    { "id": "enrichment", "lane": "data", "col": 1, "type": "database", "label": "Company data", "sublabel": "synthetic", "width": 132 },
-    { "id": "kb", "lane": "data", "col": 2, "type": "database", "label": "Product docs", "sublabel": "retrieval", "width": 132 },
-    { "id": "crm_mock", "lane": "data", "col": 5, "type": "cloud", "label": "Mock CRM", "sublabel": "behind MCP", "width": 132 }
+    {
+      "id": "lead",
+      "lane": "sup",
+      "col": 0,
+      "type": "external",
+      "label": "Lead",
+      "sublabel": "synthetic account",
+      "width": 132
+    },
+    {
+      "id": "supervisor",
+      "lane": "sup",
+      "col": 2,
+      "type": "backend",
+      "label": "Supervisor",
+      "sublabel": "Deep Agent",
+      "width": 132
+    },
+    {
+      "id": "researcher",
+      "lane": "agents",
+      "col": 0,
+      "type": "backend",
+      "label": "Researcher",
+      "sublabel": "enriches the lead",
+      "width": 132
+    },
+    {
+      "id": "qualifier",
+      "lane": "agents",
+      "col": 1,
+      "type": "backend",
+      "label": "Qualifier",
+      "sublabel": "hot, warm or cold",
+      "width": 132
+    },
+    {
+      "id": "writer",
+      "lane": "agents",
+      "col": 3,
+      "type": "backend",
+      "label": "Writer",
+      "sublabel": "drafts the email",
+      "width": 132
+    },
+    {
+      "id": "crm_agent",
+      "lane": "agents",
+      "col": 4,
+      "type": "backend",
+      "label": "CRM agent",
+      "sublabel": "records the outcome",
+      "width": 132
+    },
+    {
+      "id": "company",
+      "lane": "tools",
+      "col": 0,
+      "type": "database",
+      "label": "Company data",
+      "sublabel": "synthetic",
+      "width": 132
+    },
+    {
+      "id": "docs",
+      "lane": "tools",
+      "col": 3,
+      "type": "database",
+      "label": "Product docs",
+      "sublabel": "retrieval",
+      "width": 132
+    },
+    {
+      "id": "guardrail",
+      "lane": "tools",
+      "col": 4,
+      "type": "security",
+      "label": "Guardrail",
+      "sublabel": "check_draft",
+      "width": 132
+    },
+    {
+      "id": "approval",
+      "lane": "tools",
+      "col": 5,
+      "type": "security",
+      "label": "Human approval",
+      "sublabel": "interrupt_on",
+      "width": 132
+    },
+    {
+      "id": "crm_mock",
+      "lane": "ext",
+      "col": 5,
+      "type": "cloud",
+      "label": "Mock CRM",
+      "sublabel": "behind MCP",
+      "width": 132
+    }
   ],
   "edges": [
-    { "id": "lead-in", "from": "lead", "to": "supervisor", "variant": "default" },
-    { "id": "delegate", "from": "supervisor", "to": "researcher", "label": "delegate", "variant": "emphasis" },
-    { "id": "enrich-lookup", "from": "enrichment", "to": "researcher", "variant": "dashed" },
-    { "id": "enriched", "from": "researcher", "to": "qualifier", "label": "enriched lead", "variant": "default" },
-    { "id": "hot-only", "from": "qualifier", "to": "writer", "label": "hot only", "variant": "emphasis" },
-    { "id": "grounding", "from": "kb", "to": "writer", "label": "grounding", "variant": "dashed" },
-    { "id": "draft", "from": "writer", "to": "guardrail", "label": "draft", "variant": "security" },
-    { "id": "passed", "from": "guardrail", "to": "approval", "label": "passed", "variant": "security" },
-    { "id": "approved", "from": "approval", "to": "crm_agent", "label": "approved", "variant": "emphasis" },
-    { "id": "mcp", "from": "crm_agent", "to": "crm_mock", "label": "MCP", "variant": "default" }
+    {
+      "id": "lead-in",
+      "from": "lead",
+      "to": "supervisor",
+      "variant": "default"
+    },
+    {
+      "id": "call-researcher",
+      "from": "supervisor",
+      "to": "researcher",
+      "variant": "emphasis",
+      "label": "research"
+    },
+    {
+      "id": "back-researcher",
+      "from": "researcher",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return"
+    },
+    {
+      "id": "call-qualifier",
+      "from": "supervisor",
+      "to": "qualifier",
+      "variant": "emphasis",
+      "label": "qualify",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-qualifier",
+      "from": "qualifier",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "call-writer",
+      "from": "supervisor",
+      "to": "writer",
+      "variant": "emphasis",
+      "label": "draft",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-writer",
+      "from": "writer",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "call-crm_agent",
+      "from": "supervisor",
+      "to": "crm_agent",
+      "variant": "emphasis",
+      "label": "record",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-crm_agent",
+      "from": "crm_agent",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "lookup",
+      "from": "researcher",
+      "to": "company",
+      "variant": "dashed",
+      "label": "lookup_company"
+    },
+    {
+      "id": "search",
+      "from": "writer",
+      "to": "docs",
+      "variant": "dashed",
+      "label": "search_product_docs"
+    },
+    {
+      "id": "record",
+      "from": "crm_agent",
+      "to": "guardrail",
+      "variant": "security",
+      "label": "record_outreach"
+    },
+    {
+      "id": "passed",
+      "from": "guardrail",
+      "to": "approval",
+      "variant": "security",
+      "label": "passed"
+    },
+    {
+      "id": "approved",
+      "from": "approval",
+      "to": "crm_mock",
+      "variant": "emphasis",
+      "label": "approved"
+    }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Where the Supervisor sits",
+      "title": "How the Supervisor works",
       "items": [
-        "It decides the order and calls the other agents as subagents or tools",
-        "The path here is the outbound case, other use cases reuse the same agents"
+        "It calls each agent as a subagent and gets the result back",
+        "Agents never call each other, the Supervisor decides the next step"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "After qualification",
+      "items": [
+        "Hot goes to the Writer for a draft",
+        "Warm and cold are saved to the CRM with their label and reason, no draft"
       ]
     },
     {
       "dot": "rose",
       "title": "Rules live in code",
       "items": [
-        "The guardrail and the approval gate run inside tool code, not in prompts",
+        "The guardrail and the approval gate run inside the record_outreach tool, not in prompts",
         "A rejected draft never reaches the CRM as approved"
       ]
     }

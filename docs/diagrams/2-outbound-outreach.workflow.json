@@ -4,52 +4,191 @@
   "meta": {
     "title": "2. Outbound outreach drafting",
     "quality_profile": "showcase",
-    "viewBox": [1112, 652],
+    "viewBox": [
+      1112,
+      652
+    ],
     "output": "docs/diagrams/2-outbound-outreach.html"
   },
   "lanes": [
-    { "id": "input", "label": "Input" },
-    { "id": "agents", "label": "Agents" },
-    { "id": "safety", "label": "Safety and approval", "variant": "exception" },
-    { "id": "data", "label": "Data and outcomes" }
+    {
+      "id": "sup",
+      "label": "Orchestrator"
+    },
+    {
+      "id": "agents",
+      "label": "Subagents"
+    },
+    {
+      "id": "tools",
+      "label": "Tools and checks"
+    },
+    {
+      "id": "ext",
+      "label": "External"
+    }
   ],
-  "mainPath": ["lead", "writer", "guardrail", "approval", "crm_agent", "crm_mock"],
   "nodes": [
-    { "id": "lead", "lane": "input", "col": 0, "type": "external", "label": "Qualified lead", "sublabel": "worth contacting", "width": 132 },
-    { "id": "writer", "lane": "agents", "col": 1, "type": "backend", "label": "Writer", "sublabel": "drafts the email", "width": 132 },
-    { "id": "kb", "lane": "data", "col": 1, "type": "database", "label": "Product docs", "sublabel": "retrieval", "width": 132 },
-    { "id": "guardrail", "lane": "safety", "col": 2, "type": "security", "label": "Guardrail", "sublabel": "checks the draft", "width": 132 },
-    { "id": "blocked", "lane": "data", "col": 2, "type": "security", "label": "Blocked", "sublabel": "draft fails a check", "width": 132 },
-    { "id": "approval", "lane": "safety", "col": 3, "type": "security", "label": "Human approval", "sublabel": "decides", "width": 132 },
-    { "id": "rejected", "lane": "data", "col": 3, "type": "security", "label": "Rejected", "sublabel": "not recorded", "width": 132 },
-    { "id": "crm_agent", "lane": "agents", "col": 4, "type": "backend", "label": "CRM agent", "sublabel": "records the draft", "width": 132 },
-    { "id": "crm_mock", "lane": "data", "col": 4, "type": "cloud", "label": "Mock CRM", "sublabel": "behind MCP", "width": 132 }
+    {
+      "id": "lead",
+      "lane": "sup",
+      "col": 0,
+      "type": "external",
+      "label": "Qualified lead",
+      "sublabel": "worth contacting",
+      "width": 132
+    },
+    {
+      "id": "supervisor",
+      "lane": "sup",
+      "col": 2,
+      "type": "backend",
+      "label": "Supervisor",
+      "sublabel": "Deep Agent",
+      "width": 132
+    },
+    {
+      "id": "writer",
+      "lane": "agents",
+      "col": 3,
+      "type": "backend",
+      "label": "Writer",
+      "sublabel": "drafts the email",
+      "width": 132
+    },
+    {
+      "id": "crm_agent",
+      "lane": "agents",
+      "col": 4,
+      "type": "backend",
+      "label": "CRM agent",
+      "sublabel": "records the draft",
+      "width": 132
+    },
+    {
+      "id": "docs",
+      "lane": "tools",
+      "col": 3,
+      "type": "database",
+      "label": "Product docs",
+      "sublabel": "retrieval",
+      "width": 132
+    },
+    {
+      "id": "guardrail",
+      "lane": "tools",
+      "col": 4,
+      "type": "security",
+      "label": "Guardrail",
+      "sublabel": "check_draft",
+      "width": 132
+    },
+    {
+      "id": "approval",
+      "lane": "tools",
+      "col": 5,
+      "type": "security",
+      "label": "Human approval",
+      "sublabel": "interrupt_on",
+      "width": 132
+    },
+    {
+      "id": "crm_mock",
+      "lane": "ext",
+      "col": 5,
+      "type": "cloud",
+      "label": "Mock CRM",
+      "sublabel": "behind MCP",
+      "width": 132
+    }
   ],
   "edges": [
-    { "id": "lead-in", "from": "lead", "to": "writer", "variant": "default" },
-    { "id": "grounding", "from": "kb", "to": "writer", "label": "grounding", "variant": "dashed" },
-    { "id": "draft", "from": "writer", "to": "guardrail", "label": "draft", "variant": "security" },
-    { "id": "fails", "from": "guardrail", "to": "blocked", "label": "fails", "variant": "security", "role": "error" },
-    { "id": "passed", "from": "guardrail", "to": "approval", "label": "passed", "variant": "security" },
-    { "id": "reject", "from": "approval", "to": "rejected", "label": "reject", "variant": "security", "role": "error" },
-    { "id": "approved", "from": "approval", "to": "crm_agent", "label": "approved", "variant": "emphasis" },
-    { "id": "mcp", "from": "crm_agent", "to": "crm_mock", "label": "MCP", "variant": "default" }
+    {
+      "id": "lead-in",
+      "from": "lead",
+      "to": "supervisor",
+      "variant": "default"
+    },
+    {
+      "id": "call-writer",
+      "from": "supervisor",
+      "to": "writer",
+      "variant": "emphasis",
+      "label": "draft",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-writer",
+      "from": "writer",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "call-crm_agent",
+      "from": "supervisor",
+      "to": "crm_agent",
+      "variant": "emphasis",
+      "label": "record",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-crm_agent",
+      "from": "crm_agent",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "search",
+      "from": "writer",
+      "to": "docs",
+      "variant": "dashed",
+      "label": "search_product_docs"
+    },
+    {
+      "id": "record",
+      "from": "crm_agent",
+      "to": "guardrail",
+      "variant": "security",
+      "label": "record_outreach"
+    },
+    {
+      "id": "passed",
+      "from": "guardrail",
+      "to": "approval",
+      "variant": "security",
+      "label": "passed"
+    },
+    {
+      "id": "approved",
+      "from": "approval",
+      "to": "crm_mock",
+      "variant": "emphasis",
+      "label": "approved"
+    }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Guardrail checks",
+      "title": "How the Supervisor works",
       "items": [
-        "Claims the product docs do not support",
-        "Prohibited content and a missing opt-out"
+        "It calls each agent as a subagent and gets the result back",
+        "Agents never call each other, the Supervisor decides the next step"
       ]
     },
     {
       "dot": "rose",
-      "title": "Metrics",
+      "title": "Checks and metrics",
       "items": [
-        "Guardrail catch rate on fabricated claims and missing opt-out",
-        "Draft acceptance rate from the scripted checklist"
+        "A failing draft or a rejection is never recorded as approved",
+        "Guardrail catch rate on planted faults, draft acceptance by the scripted checklist"
       ]
     }
   ]

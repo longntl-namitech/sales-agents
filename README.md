@@ -42,7 +42,7 @@ The diagram sources are the `*.workflow.json` files next to them. Only the Quali
 
 [Open the interactive diagram](docs/architecture.html) (download it and open it in a browser). It supports pan, zoom, search and light or dark theme. The source is [docs/architecture.workflow.json](docs/architecture.workflow.json).
 
-The diagram shows the outbound path. The Supervisor decides the order and calls the other agents, so the straight line is the common case, not a fixed pipeline.
+The Supervisor sits in the middle. It calls the Researcher, Qualifier, Writer and CRM agent as subagents and gets each result back, so the agents never call each other. The guardrail and the approval gate are not agents. They run inside the `record_outreach` tool, which checks the draft, pauses for a human decision, and only then writes to the mock CRM.
 
 Design rules:
 

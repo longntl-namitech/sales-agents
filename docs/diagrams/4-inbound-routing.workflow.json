@@ -4,48 +4,202 @@
   "meta": {
     "title": "4. Inbound lead routing",
     "quality_profile": "showcase",
+    "viewBox": [
+      1112,
+      652
+    ],
     "output": "docs/diagrams/4-inbound-routing.html"
   },
   "lanes": [
-    { "id": "input", "label": "Input" },
-    { "id": "agents", "label": "Agents" },
-    { "id": "data", "label": "Data" }
+    {
+      "id": "sup",
+      "label": "Orchestrator"
+    },
+    {
+      "id": "agents",
+      "label": "Subagents"
+    },
+    {
+      "id": "tools",
+      "label": "Tools and checks"
+    },
+    {
+      "id": "ext",
+      "label": "External"
+    }
   ],
-  "mainPath": ["form", "researcher", "qualifier", "supervisor", "crm_agent", "crm_mock"],
   "nodes": [
-    { "id": "form", "lane": "input", "col": 0, "type": "external", "label": "Form or demo", "sublabel": "inbound request", "width": 132 },
-    { "id": "researcher", "lane": "agents", "col": 1, "type": "backend", "label": "Researcher", "sublabel": "enriches the lead", "width": 132 },
-    { "id": "enrichment", "lane": "data", "col": 1, "type": "database", "label": "Company data", "sublabel": "synthetic", "width": 132 },
-    { "id": "qualifier", "lane": "agents", "col": 2, "type": "backend", "label": "Qualifier", "sublabel": "hot, warm or cold", "width": 132 },
-    { "id": "supervisor", "lane": "agents", "col": 3, "type": "backend", "label": "Supervisor", "sublabel": "picks the rep", "width": 132 },
-    { "id": "roster", "lane": "data", "col": 3, "type": "database", "label": "Rep roster", "sublabel": "territory, segment", "width": 132 },
-    { "id": "crm_agent", "lane": "agents", "col": 4, "type": "backend", "label": "CRM agent", "sublabel": "updates the record", "width": 132 },
-    { "id": "crm_mock", "lane": "data", "col": 4, "type": "cloud", "label": "Mock CRM", "sublabel": "behind MCP", "width": 132 }
+    {
+      "id": "form",
+      "lane": "sup",
+      "col": 0,
+      "type": "external",
+      "label": "Form or demo",
+      "sublabel": "inbound request",
+      "width": 132
+    },
+    {
+      "id": "supervisor",
+      "lane": "sup",
+      "col": 2,
+      "type": "backend",
+      "label": "Supervisor",
+      "sublabel": "Deep Agent",
+      "width": 132
+    },
+    {
+      "id": "roster",
+      "lane": "sup",
+      "col": 4,
+      "type": "database",
+      "label": "Rep roster",
+      "sublabel": "territory, segment",
+      "width": 132
+    },
+    {
+      "id": "researcher",
+      "lane": "agents",
+      "col": 1,
+      "type": "backend",
+      "label": "Researcher",
+      "sublabel": "enriches the lead",
+      "width": 132
+    },
+    {
+      "id": "qualifier",
+      "lane": "agents",
+      "col": 3,
+      "type": "backend",
+      "label": "Qualifier",
+      "sublabel": "hot, warm or cold",
+      "width": 132
+    },
+    {
+      "id": "crm_agent",
+      "lane": "agents",
+      "col": 4,
+      "type": "backend",
+      "label": "CRM agent",
+      "sublabel": "updates the record",
+      "width": 132
+    },
+    {
+      "id": "company",
+      "lane": "tools",
+      "col": 1,
+      "type": "database",
+      "label": "Company data",
+      "sublabel": "synthetic",
+      "width": 132
+    },
+    {
+      "id": "crm_mock",
+      "lane": "ext",
+      "col": 4,
+      "type": "cloud",
+      "label": "Mock CRM",
+      "sublabel": "behind MCP",
+      "width": 132
+    }
   ],
   "edges": [
-    { "id": "form-in", "from": "form", "to": "researcher", "variant": "default" },
-    { "id": "lookup", "from": "enrichment", "to": "researcher", "variant": "dashed" },
-    { "id": "enriched", "from": "researcher", "to": "qualifier", "label": "enriched lead", "variant": "default" },
-    { "id": "scored", "from": "qualifier", "to": "supervisor", "label": "label", "variant": "emphasis" },
-    { "id": "rules", "from": "roster", "to": "supervisor", "label": "rules", "variant": "dashed" },
-    { "id": "assigned", "from": "supervisor", "to": "crm_agent", "label": "rep", "variant": "emphasis" },
-    { "id": "mcp", "from": "crm_agent", "to": "crm_mock", "label": "MCP", "variant": "default" }
+    {
+      "id": "form-in",
+      "from": "form",
+      "to": "supervisor",
+      "variant": "default"
+    },
+    {
+      "id": "rules",
+      "from": "supervisor",
+      "to": "roster",
+      "variant": "dashed",
+      "label": "route by rules"
+    },
+    {
+      "id": "call-researcher",
+      "from": "supervisor",
+      "to": "researcher",
+      "variant": "emphasis",
+      "label": "research",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-researcher",
+      "from": "researcher",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "call-qualifier",
+      "from": "supervisor",
+      "to": "qualifier",
+      "variant": "emphasis",
+      "label": "qualify",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-qualifier",
+      "from": "qualifier",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "call-crm_agent",
+      "from": "supervisor",
+      "to": "crm_agent",
+      "variant": "emphasis",
+      "label": "assign rep",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "back-crm_agent",
+      "from": "crm_agent",
+      "to": "supervisor",
+      "variant": "dashed",
+      "role": "return",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "lookup",
+      "from": "researcher",
+      "to": "company",
+      "variant": "dashed",
+      "label": "lookup_company"
+    },
+    {
+      "id": "mcp",
+      "from": "crm_agent",
+      "to": "crm_mock",
+      "variant": "default",
+      "label": "MCP"
+    }
   ],
   "cards": [
     {
       "dot": "cyan",
-      "title": "Routing",
+      "title": "How the Supervisor works",
       "items": [
-        "The Supervisor assigns a rep by territory or segment rules",
-        "A lead with no matching rep stays unassigned"
+        "It calls each agent as a subagent and gets the result back",
+        "Agents never call each other, the Supervisor decides the next step"
       ]
     },
     {
       "dot": "rose",
-      "title": "Metrics",
+      "title": "Routing and metrics",
       "items": [
-        "Correct-rep rate",
-        "Time from form to decision"
+        "The Supervisor picks the rep, a lead with no matching rep stays unassigned",
+        "Correct-rep rate, time from form to decision"
       ]
     }
   ]

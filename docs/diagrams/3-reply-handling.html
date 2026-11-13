@@ -5030,18 +5030,17 @@
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Swimlanes -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="876" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Input</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="827" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Orchestrator</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="876" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agents</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="827" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Subagents</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="876" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="exception-lane" data-composition-frame-id="lane-2-exception" x="46" y="306" width="864" height="92" rx="8" class="c-security-group" stroke-width="1"/>
-        <text x="54" y="322" class="t-security" font-size="10" font-weight="600">EX / Safety and approval</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="827" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Tools and checks</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="876" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Data</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="827" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / External</text>
 
         <!-- Phase headers -->
 
@@ -5050,17 +5049,21 @@
 
 
         <!-- Edge paths -->
-        <path data-edge-from="approval" data-edge-to="crm_agent" data-edge-label="approved" data-edge-key="0" data-edge-id="approved" data-composition-points="721.2,341;721.2,243;775.2,243" d="M 721.2 341 L 721.2 243 L 775.2 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="classifier" data-edge-to="writer" data-edge-label="category" data-edge-key="1" data-edge-id="classified" data-composition-points="300,243;356.4,243" d="M 300 243 L 356.4 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="writer" data-edge-to="guardrail" data-edge-label="draft" data-edge-key="2" data-edge-id="draft" data-composition-points="429.4,269;429.4,367;476.4,367" d="M 429.4 269 L 429.4 367 L 476.4 367" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="kb" data-edge-to="writer" data-edge-key="3" data-edge-id="grounding" data-composition-points="356.4,491;340.4,491;340.4,352;422.4,352;422.4,269" d="M 356.4 491 L 340.4 491 L 340.4 352 L 422.4 352 L 422.4 269" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="crm_agent" data-edge-to="crm_mock" data-edge-label="MCP" data-edge-key="4" data-edge-id="mcp" data-composition-points="907.2,243;933.2,243;933.2,491;907.2,491" d="M 907.2 243 L 933.2 243 L 933.2 491 L 907.2 491" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="5" data-edge-id="passed" data-composition-points="608.4,367;655.2,367" d="M 608.4 367 L 655.2 367" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="reply" data-edge-to="classifier" data-edge-key="6" data-edge-id="reply-in" data-composition-points="180,119;234,119;234,217" d="M 180 119 L 234 119 L 234 217" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="approval" data-edge-to="crm_mock" data-edge-label="approved" data-edge-key="0" data-edge-id="approved" data-composition-points="858.8,367;903.2,367;903.2,491;858.8,491" d="M 858.8 367 L 903.2 367 L 903.2 491 L 858.8 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="classifier" data-edge-to="supervisor" data-edge-key="1" data-edge-id="back-classifier" data-composition-points="227,217;227,166;319,166;319,145" d="M 227 217 L 227 166 L 319 166 L 319 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="crm_agent" data-edge-to="supervisor" data-edge-key="2" data-edge-id="back-crm_agent" data-composition-points="607,217;607,166;375,166;375,145" d="M 607 217 L 607 166 L 375 166 L 375 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="writer" data-edge-to="supervisor" data-edge-key="3" data-edge-id="back-writer" data-composition-points="467,217;467,166;347,166;347,145" d="M 467 217 L 467 166 L 347 166 L 347 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="supervisor" data-edge-to="classifier" data-edge-label="classify" data-edge-key="4" data-edge-id="call-classifier" data-composition-points="333,145;333,161;879,161;879,201;241,201;241,217" d="M 333 145 L 333 161 L 879 161 L 879 201 L 241 201 L 241 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="5" data-edge-id="call-crm_agent" data-composition-points="389,145;389,161;505,161;505,201;621,201;621,217" d="M 389 145 L 389 161 L 505 161 L 505 201 L 621 201 L 621 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="6" data-edge-id="call-writer" data-composition-points="361,145;361,161;879,161;879,201;481,201;481,217" d="M 361 145 L 361 161 L 879 161 L 879 201 L 481 201 L 481 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="7" data-edge-id="passed" data-composition-points="680,367;726.8,367" d="M 680 367 L 726.8 367" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="8" data-edge-id="record" data-composition-points="680,243;696,243;696,290;614,290;614,341" d="M 680 243 L 696 243 L 696 290 L 614 290 L 614 341" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="reply" data-edge-to="supervisor" data-edge-key="9" data-edge-id="reply-in" data-composition-points="180,119;288,119" d="M 180 119 L 288 119" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="10" data-edge-id="search" data-composition-points="474,269;474,290;392,290;392,367;408,367" d="M 474 269 L 474 290 L 392 290 L 392 367 L 408 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
 
         <!-- Nodes -->
-        <g id="node-reply" data-node-id="reply" data-node-label="Lead reply" tabindex="0" role="button" aria-label="Focus Lead reply, to an outreach, Input" aria-pressed="false" data-node-kind="external" data-node-sublabel="to an outreach" data-node-context="Input">
-          <title>Lead reply · to an outreach · Input</title>
+        <g id="node-reply" data-node-id="reply" data-node-label="Lead reply" tabindex="0" role="button" aria-label="Focus Lead reply, to an outreach, Orchestrator" aria-pressed="false" data-node-kind="external" data-node-sublabel="to an outreach" data-node-context="Orchestrator">
+          <title>Lead reply · to an outreach · Orchestrator</title>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
@@ -5071,8 +5074,19 @@
           <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">to an outreach</text>
         </g>
 
-        <g id="node-classifier" data-node-id="classifier" data-node-label="Reply classifier" tabindex="0" role="button" aria-label="Focus Reply classifier, four categories, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="four categories" data-node-context="Agents">
-          <title>Reply classifier · four categories · Agents</title>
+        <g id="node-supervisor" data-node-id="supervisor" data-node-label="Supervisor" tabindex="0" role="button" aria-label="Focus Supervisor, Deep Agent, Orchestrator" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Deep Agent" data-node-context="Orchestrator">
+          <title>Supervisor · Deep Agent · Orchestrator</title>
+          <rect x="288" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="288" y="93" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(294 99) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="354" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Supervisor</text>
+          <text data-detail="context" x="354" y="131" class="t-muted" font-size="8" text-anchor="middle">Deep Agent</text>
+        </g>
+
+        <g id="node-classifier" data-node-id="classifier" data-node-label="Reply classifier" tabindex="0" role="button" aria-label="Focus Reply classifier, four categories, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="four categories" data-node-context="Subagents">
+          <title>Reply classifier · four categories · Subagents</title>
           <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="168" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(174 223) scale(0.6875)">
@@ -5082,98 +5096,108 @@
           <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">four categories</text>
         </g>
 
-        <g id="node-writer" data-node-id="writer" data-node-label="Writer" tabindex="0" role="button" aria-label="Focus Writer, drafts a response, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="drafts a response" data-node-context="Agents">
-          <title>Writer · drafts a response · Agents</title>
-          <rect x="356.4" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="356.4" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(362.4 223) scale(0.6875)">
+        <g id="node-writer" data-node-id="writer" data-node-label="Writer" tabindex="0" role="button" aria-label="Focus Writer, drafts a response, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="drafts a response" data-node-context="Subagents">
+          <title>Writer · drafts a response · Subagents</title>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="422.4" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Writer</text>
-          <text data-detail="context" x="422.4" y="255" class="t-muted" font-size="8" text-anchor="middle">drafts a response</text>
+          <text data-node-label="" data-detail-anchor="" x="474" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Writer</text>
+          <text data-detail="context" x="474" y="255" class="t-muted" font-size="8" text-anchor="middle">drafts a response</text>
         </g>
 
-        <g id="node-crm_agent" data-node-id="crm_agent" data-node-label="CRM agent" tabindex="0" role="button" aria-label="Focus CRM agent, updates the record, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="updates the record" data-node-context="Agents">
-          <title>CRM agent · updates the record · Agents</title>
-          <rect x="775.2" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="775.2" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(781.2 223) scale(0.6875)">
+        <g id="node-crm_agent" data-node-id="crm_agent" data-node-label="CRM agent" tabindex="0" role="button" aria-label="Focus CRM agent, updates the record, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="updates the record" data-node-context="Subagents">
+          <title>CRM agent · updates the record · Subagents</title>
+          <rect x="548" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="548" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(554 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="841.2" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">CRM agent</text>
-          <text data-detail="context" x="841.2" y="255" class="t-muted" font-size="8" text-anchor="middle">updates the record</text>
+          <text data-node-label="" data-detail-anchor="" x="614" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">CRM agent</text>
+          <text data-detail="context" x="614" y="255" class="t-muted" font-size="8" text-anchor="middle">updates the record</text>
         </g>
 
-        <g id="node-guardrail" data-node-id="guardrail" data-node-label="Guardrail" tabindex="0" role="button" aria-label="Focus Guardrail, checks the draft, Safety and approval" aria-pressed="false" data-node-kind="security" data-node-sublabel="checks the draft" data-node-context="Safety and approval">
-          <title>Guardrail · checks the draft · Safety and approval</title>
-          <rect x="476.4" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="476.4" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(482.4 347) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="542.4" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Guardrail</text>
-          <text data-detail="context" x="542.4" y="379" class="t-muted" font-size="8" text-anchor="middle">checks the draft</text>
-        </g>
-
-        <g id="node-approval" data-node-id="approval" data-node-label="Human approval" tabindex="0" role="button" aria-label="Focus Human approval, decides, Safety and approval" aria-pressed="false" data-node-kind="security" data-node-sublabel="decides" data-node-context="Safety and approval">
-          <title>Human approval · decides · Safety and approval</title>
-          <rect x="655.2" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="655.2" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(661.2 347) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="721.2" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Human approval</text>
-          <text data-detail="context" x="721.2" y="379" class="t-muted" font-size="8" text-anchor="middle">decides</text>
-        </g>
-
-        <g id="node-kb" data-node-id="kb" data-node-label="Product docs" tabindex="0" role="button" aria-label="Focus Product docs, retrieval, Data" aria-pressed="false" data-node-kind="database" data-node-sublabel="retrieval" data-node-context="Data">
-          <title>Product docs · retrieval · Data</title>
-          <rect x="356.4" y="465" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="356.4" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(362.4 471) scale(0.6875)">
+        <g id="node-docs" data-node-id="docs" data-node-label="Product docs" tabindex="0" role="button" aria-label="Focus Product docs, retrieval, Tools and checks" aria-pressed="false" data-node-kind="database" data-node-sublabel="retrieval" data-node-context="Tools and checks">
+          <title>Product docs · retrieval · Tools and checks</title>
+          <rect x="408" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="408" y="341" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(414 347) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="422.4" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Product docs</text>
-          <text data-detail="context" x="422.4" y="503" class="t-muted" font-size="8" text-anchor="middle">retrieval</text>
+          <text data-node-label="" data-detail-anchor="" x="474" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Product docs</text>
+          <text data-detail="context" x="474" y="379" class="t-muted" font-size="8" text-anchor="middle">retrieval</text>
         </g>
 
-        <g id="node-crm_mock" data-node-id="crm_mock" data-node-label="Mock CRM" tabindex="0" role="button" aria-label="Focus Mock CRM, behind MCP, Data" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="behind MCP" data-node-context="Data">
-          <title>Mock CRM · behind MCP · Data</title>
-          <rect x="775.2" y="465" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="775.2" y="465" width="132" height="52" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(781.2 471) scale(0.6875)">
+        <g id="node-guardrail" data-node-id="guardrail" data-node-label="Guardrail" tabindex="0" role="button" aria-label="Focus Guardrail, check_draft, Tools and checks" aria-pressed="false" data-node-kind="security" data-node-sublabel="check_draft" data-node-context="Tools and checks">
+          <title>Guardrail · check_draft · Tools and checks</title>
+          <rect x="548" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="548" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(554 347) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="614" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Guardrail</text>
+          <text data-detail="context" x="614" y="379" class="t-muted" font-size="8" text-anchor="middle">check_draft</text>
+        </g>
+
+        <g id="node-approval" data-node-id="approval" data-node-label="Human approval" tabindex="0" role="button" aria-label="Focus Human approval, interrupt_on, Tools and checks" aria-pressed="false" data-node-kind="security" data-node-sublabel="interrupt_on" data-node-context="Tools and checks">
+          <title>Human approval · interrupt_on · Tools and checks</title>
+          <rect x="726.8" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="726.8" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(732.8 347) scale(0.6875)">
+            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
+            <path d="m5.8 8 1.5 1.5 3-3"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="792.8" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Human approval</text>
+          <text data-detail="context" x="792.8" y="379" class="t-muted" font-size="8" text-anchor="middle">interrupt_on</text>
+        </g>
+
+        <g id="node-crm_mock" data-node-id="crm_mock" data-node-label="Mock CRM" tabindex="0" role="button" aria-label="Focus Mock CRM, behind MCP, External" aria-pressed="false" data-node-kind="cloud" data-node-sublabel="behind MCP" data-node-context="External">
+          <title>Mock CRM · behind MCP · External</title>
+          <rect x="726.8" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="726.8" y="465" width="132" height="52" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(732.8 471) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="841.2" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Mock CRM</text>
-          <text data-detail="context" x="841.2" y="503" class="t-muted" font-size="8" text-anchor="middle">behind MCP</text>
+          <text data-node-label="" data-detail-anchor="" x="792.8" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Mock CRM</text>
+          <text data-detail="context" x="792.8" y="503" class="t-muted" font-size="8" text-anchor="middle">behind MCP</text>
         </g>
 
         <!-- Edge labels -->
-        <g data-detail="context" data-edge-from="approval" data-edge-to="crm_agent" data-edge-label="approved" data-edge-key="0" data-edge-id="approved">
-          <rect x="724" y="223" width="48.4" height="14" rx="3" class="c-mask"/>
-          <text x="748.2" y="233" class="t-backend" font-size="8" text-anchor="middle">approved</text>
-        </g>
-        <g data-detail="context" data-edge-from="classifier" data-edge-to="writer" data-edge-label="category" data-edge-key="1" data-edge-id="classified">
-          <rect x="304" y="223" width="48.4" height="14" rx="3" class="c-mask"/>
-          <text x="328.2" y="233" class="t-backend" font-size="8" text-anchor="middle">category</text>
-        </g>
-        <g data-detail="context" data-edge-from="writer" data-edge-to="guardrail" data-edge-label="draft" data-edge-key="2" data-edge-id="draft">
-          <rect x="435.9" y="347" width="34" height="14" rx="3" class="c-mask"/>
-          <text x="452.9" y="357" class="t-security" font-size="8" text-anchor="middle">draft</text>
+        <g data-detail="context" data-edge-from="approval" data-edge-to="crm_mock" data-edge-label="approved" data-edge-key="0" data-edge-id="approved">
+          <rect x="856.8" y="347" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="881" y="357" class="t-backend" font-size="8" text-anchor="middle">approved</text>
         </g>
 
-        <g data-detail="context" data-edge-from="crm_agent" data-edge-to="crm_mock" data-edge-label="MCP" data-edge-key="4" data-edge-id="mcp">
-          <rect x="905.2" y="223" width="30" height="14" rx="3" class="c-mask"/>
-          <text x="920.2" y="233" class="t-muted" font-size="8" text-anchor="middle">MCP</text>
+
+
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="classifier" data-edge-label="classify" data-edge-key="4" data-edge-id="call-classifier">
+          <rect x="535.8" y="181" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="560" y="191" class="t-backend" font-size="8" text-anchor="middle">classify</text>
         </g>
-        <g data-detail="context" data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="5" data-edge-id="passed">
-          <rect x="612.4" y="347" width="38.8" height="14" rx="3" class="c-mask"/>
-          <text x="631.8" y="357" class="t-security" font-size="8" text-anchor="middle">passed</text>
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="5" data-edge-id="call-crm_agent">
+          <rect x="427.6" y="141" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="447" y="151" class="t-backend" font-size="8" text-anchor="middle">record</text>
+        </g>
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="6" data-edge-id="call-writer">
+          <rect x="603" y="141" width="34" height="14" rx="3" class="c-mask"/>
+          <text x="620" y="151" class="t-backend" font-size="8" text-anchor="middle">draft</text>
+        </g>
+        <g data-detail="context" data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="7" data-edge-id="passed">
+          <rect x="684" y="347" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="703.4" y="357" class="t-security" font-size="8" text-anchor="middle">passed</text>
+        </g>
+        <g data-detail="context" data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="8" data-edge-id="record">
+          <rect x="614" y="270" width="82" height="14" rx="3" class="c-mask"/>
+          <text x="655" y="280" class="t-security" font-size="8" text-anchor="middle">record_outreach</text>
         </g>
 
+        <g data-detail="context" data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="10" data-edge-id="search">
+          <rect x="382.4" y="270" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="433" y="280" class="t-database" font-size="8" text-anchor="middle">search_product_docs</text>
+        </g>
 
         <!-- Legend -->
         <g data-legend="" data-legend-bridge="">
@@ -5388,22 +5412,22 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Categories</h3>
+          <h3>How the Supervisor works</h3>
         </div>
         <ul>
-          <li>&bull; Interested, not interested, question or reschedule</li>
-          <li>&bull; An unclear reply is not forced into interested</li>
+          <li>&bull; It calls each agent as a subagent and gets the result back</li>
+          <li>&bull; Agents never call each other, the Supervisor decides the next step</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot rose"></div>
-          <h3>Metrics</h3>
+          <h3>Categories and metrics</h3>
         </div>
         <ul>
-          <li>&bull; Reply classification accuracy</li>
-          <li>&bull; Correct CRM update rate</li>
+          <li>&bull; Interested, not interested, question or reschedule, an unclear reply is not forced into interested</li>
+          <li>&bull; Reply classification accuracy, correct CRM update rate</li>
         </ul>
       </div>
     </div>

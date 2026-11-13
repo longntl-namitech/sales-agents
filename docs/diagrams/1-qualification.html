@@ -5030,17 +5030,17 @@
         <rect width="100%" height="100%" fill="url(#grid)" />
 
         <!-- Swimlanes -->
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="949" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Input</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Orchestrator</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="949" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agents</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Subagents</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="949" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Label</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Tools and checks</text>
 
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="949" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Data</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / External</text>
 
         <!-- Phase headers -->
 
@@ -5049,18 +5049,18 @@
 
 
         <!-- Edge paths -->
-        <path data-edge-from="supervisor" data-edge-to="researcher" data-edge-label="delegate" data-edge-key="0" data-edge-id="delegate" data-composition-points="114,269;114,285;302.4,285;302.4,269" d="M 114 269 L 114 285 L 302.4 285 L 302.4 269" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="researcher" data-edge-to="qualifier" data-edge-label="enriched lead" data-edge-key="1" data-edge-id="enriched" data-composition-points="368.4,243;448.79999999999995,243" d="M 368.4 243 L 448.79999999999995 243" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="inbound" data-edge-to="supervisor" data-edge-key="2" data-edge-id="inbound-in" data-composition-points="236.39999999999998,119;208.2,119;208.2,233;180,233" d="M 236.39999999999998 119 L 208.2 119 L 208.2 233 L 180 233" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="enrichment" data-edge-to="researcher" data-edge-key="3" data-edge-id="lookup" data-composition-points="302.4,465;302.4,269" d="M 302.4 465 L 302.4 269" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="outbound" data-edge-to="supervisor" data-edge-key="4" data-edge-id="outbound-in" data-composition-points="180,119;196,119;196,243;180,243" d="M 180 119 L 196 119 L 196 243 L 180 243" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="qualifier" data-edge-to="cold" data-edge-key="5" data-edge-id="to-cold" data-composition-points="580.8,236;914.8,236;914.8,341" d="M 580.8 236 L 914.8 236 L 914.8 341" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="qualifier" data-edge-to="hot" data-edge-key="6" data-edge-id="to-hot" data-composition-points="514.8,269;514.8,367;568.8,367" d="M 514.8 269 L 514.8 367 L 568.8 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="qualifier" data-edge-to="warm" data-edge-key="7" data-edge-id="to-warm" data-composition-points="580.8,250;774.8,250;774.8,341" d="M 580.8 250 L 774.8 250 L 774.8 341" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="qualifier" data-edge-to="supervisor" data-edge-key="0" data-edge-id="back-qualifier" data-composition-points="467,217;467,166;354,166;354,145" d="M 467 217 L 467 166 L 354 166 L 354 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="researcher" data-edge-to="supervisor" data-edge-key="1" data-edge-id="back-researcher" data-composition-points="227,217;227,166;326,166;326,145" d="M 227 217 L 227 166 L 326 166 L 326 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="supervisor" data-edge-to="qualifier" data-edge-label="qualify" data-edge-key="2" data-edge-id="call-qualifier" data-composition-points="368,145;368,166;481,166;481,217" d="M 368 145 L 368 166 L 481 166 L 481 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="supervisor" data-edge-to="researcher" data-edge-label="research" data-edge-key="3" data-edge-id="call-researcher" data-composition-points="340,145;340,166;241,166;241,217" d="M 340 145 L 340 166 L 241 166 L 241 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="inbound" data-edge-to="supervisor" data-edge-key="4" data-edge-id="inbound-in" data-composition-points="734,93;734,77;354,77;354,93" d="M 734 93 L 734 77 L 354 77 L 354 93" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="researcher" data-edge-to="company" data-edge-label="lookup_company" data-edge-key="5" data-edge-id="lookup" data-composition-points="168,243;20,243;20,367;168,367" d="M 168 243 L 20 243 L 20 367 L 168 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="outbound" data-edge-to="supervisor" data-edge-key="6" data-edge-id="outbound-in" data-composition-points="180,119;288,119" d="M 180 119 L 288 119" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="supervisor" data-edge-to="label" data-edge-label="label + reason" data-edge-key="7" data-edge-id="result" data-composition-points="420,119;528,119" d="M 420 119 L 528 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
 
         <!-- Nodes -->
-        <g id="node-outbound" data-node-id="outbound" data-node-label="Account list" tabindex="0" role="button" aria-label="Focus Account list, outbound, Input" aria-pressed="false" data-node-kind="external" data-node-sublabel="outbound" data-node-context="Input">
-          <title>Account list · outbound · Input</title>
+        <g id="node-outbound" data-node-id="outbound" data-node-label="Account list" tabindex="0" role="button" aria-label="Focus Account list, outbound, Orchestrator" aria-pressed="false" data-node-kind="external" data-node-sublabel="outbound" data-node-context="Orchestrator">
+          <title>Account list · outbound · Orchestrator</title>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
@@ -5071,120 +5071,98 @@
           <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">outbound</text>
         </g>
 
-        <g id="node-inbound" data-node-id="inbound" data-node-label="Form or demo" tabindex="0" role="button" aria-label="Focus Form or demo, inbound request, Input" aria-pressed="false" data-node-kind="external" data-node-sublabel="inbound request" data-node-context="Input">
-          <title>Form or demo · inbound request · Input</title>
-          <rect x="236.39999999999998" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="236.39999999999998" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(242.39999999999998 99) scale(0.6875)">
+        <g id="node-supervisor" data-node-id="supervisor" data-node-label="Supervisor" tabindex="0" role="button" aria-label="Focus Supervisor, Deep Agent, Orchestrator" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Deep Agent" data-node-context="Orchestrator">
+          <title>Supervisor · Deep Agent · Orchestrator</title>
+          <rect x="288" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="288" y="93" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(294 99) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="354" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Supervisor</text>
+          <text data-detail="context" x="354" y="131" class="t-muted" font-size="8" text-anchor="middle">Deep Agent</text>
+        </g>
+
+        <g id="node-label" data-node-id="label" data-node-label="Label" tabindex="0" role="button" aria-label="Focus Label, hot, warm or cold, Orchestrator" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="hot, warm or cold" data-node-context="Orchestrator">
+          <title>Label · hot, warm or cold · Orchestrator</title>
+          <rect x="528" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="528" y="93" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(534 99) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="594" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Label</text>
+          <text data-detail="context" x="594" y="131" class="t-muted" font-size="8" text-anchor="middle">hot, warm or cold</text>
+        </g>
+
+        <g id="node-inbound" data-node-id="inbound" data-node-label="Form or demo" tabindex="0" role="button" aria-label="Focus Form or demo, inbound request, Orchestrator" aria-pressed="false" data-node-kind="external" data-node-sublabel="inbound request" data-node-context="Orchestrator">
+          <title>Form or demo · inbound request · Orchestrator</title>
+          <rect x="668" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="668" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(674 99) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="302.4" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Form or demo</text>
-          <text data-detail="context" x="302.4" y="131" class="t-muted" font-size="8" text-anchor="middle">inbound request</text>
+          <text data-node-label="" data-detail-anchor="" x="734" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Form or demo</text>
+          <text data-detail="context" x="734" y="131" class="t-muted" font-size="8" text-anchor="middle">inbound request</text>
         </g>
 
-        <g id="node-supervisor" data-node-id="supervisor" data-node-label="Supervisor" tabindex="0" role="button" aria-label="Focus Supervisor, Deep Agent, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="Deep Agent" data-node-context="Agents">
-          <title>Supervisor · Deep Agent · Agents</title>
-          <rect x="48" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="48" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(54 223) scale(0.6875)">
+        <g id="node-researcher" data-node-id="researcher" data-node-label="Researcher" tabindex="0" role="button" aria-label="Focus Researcher, enriches the lead, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="enriches the lead" data-node-context="Subagents">
+          <title>Researcher · enriches the lead · Subagents</title>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(174 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Supervisor</text>
-          <text data-detail="context" x="114" y="255" class="t-muted" font-size="8" text-anchor="middle">Deep Agent</text>
+          <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Researcher</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">enriches the lead</text>
         </g>
 
-        <g id="node-researcher" data-node-id="researcher" data-node-label="Researcher" tabindex="0" role="button" aria-label="Focus Researcher, enriches the lead, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="enriches the lead" data-node-context="Agents">
-          <title>Researcher · enriches the lead · Agents</title>
-          <rect x="236.39999999999998" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="236.39999999999998" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(242.39999999999998 223) scale(0.6875)">
+        <g id="node-qualifier" data-node-id="qualifier" data-node-label="Qualifier" tabindex="0" role="button" aria-label="Focus Qualifier, applies the rubric, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="applies the rubric" data-node-context="Subagents">
+          <title>Qualifier · applies the rubric · Subagents</title>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="408" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="302.4" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Researcher</text>
-          <text data-detail="context" x="302.4" y="255" class="t-muted" font-size="8" text-anchor="middle">enriches the lead</text>
+          <text data-node-label="" data-detail-anchor="" x="474" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Qualifier</text>
+          <text data-detail="context" x="474" y="255" class="t-muted" font-size="8" text-anchor="middle">applies the rubric</text>
         </g>
 
-        <g id="node-qualifier" data-node-id="qualifier" data-node-label="Qualifier" tabindex="0" role="button" aria-label="Focus Qualifier, applies the rubric, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="applies the rubric" data-node-context="Agents">
-          <title>Qualifier · applies the rubric · Agents</title>
-          <rect x="448.79999999999995" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="448.79999999999995" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(454.79999999999995 223) scale(0.6875)">
-            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="514.8" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Qualifier</text>
-          <text data-detail="context" x="514.8" y="255" class="t-muted" font-size="8" text-anchor="middle">applies the rubric</text>
-        </g>
-
-        <g id="node-hot" data-node-id="hot" data-node-label="Hot" tabindex="0" role="button" aria-label="Focus Hot, counts as qualified, Label" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="counts as qualified" data-node-context="Label">
-          <title>Hot · counts as qualified · Label</title>
-          <rect x="568.8" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="568.8" y="341" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(574.8 347) scale(0.6875)">
-            <rect x="2" y="3" width="12" height="10" rx="2"/>
-            <path d="M2 6.5h12"/>
-            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
-            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="634.8" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Hot</text>
-          <text data-detail="context" x="634.8" y="379" class="t-muted" font-size="8" text-anchor="middle">counts as qualified</text>
-        </g>
-
-        <g id="node-warm" data-node-id="warm" data-node-label="Warm" tabindex="0" role="button" aria-label="Focus Warm, with a reason, Label" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="with a reason" data-node-context="Label">
-          <title>Warm · with a reason · Label</title>
-          <rect x="708.8" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="708.8" y="341" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(714.8 347) scale(0.6875)">
-            <rect x="2" y="3" width="12" height="10" rx="2"/>
-            <path d="M2 6.5h12"/>
-            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
-            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="774.8" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Warm</text>
-          <text data-detail="context" x="774.8" y="379" class="t-muted" font-size="8" text-anchor="middle">with a reason</text>
-        </g>
-
-        <g id="node-cold" data-node-id="cold" data-node-label="Cold" tabindex="0" role="button" aria-label="Focus Cold, with a reason, Label" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="with a reason" data-node-context="Label">
-          <title>Cold · with a reason · Label</title>
-          <rect x="848.8" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="848.8" y="341" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(854.8 347) scale(0.6875)">
-            <rect x="2" y="3" width="12" height="10" rx="2"/>
-            <path d="M2 6.5h12"/>
-            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
-            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="914.8" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Cold</text>
-          <text data-detail="context" x="914.8" y="379" class="t-muted" font-size="8" text-anchor="middle">with a reason</text>
-        </g>
-
-        <g id="node-enrichment" data-node-id="enrichment" data-node-label="Company data" tabindex="0" role="button" aria-label="Focus Company data, synthetic, Data" aria-pressed="false" data-node-kind="database" data-node-sublabel="synthetic" data-node-context="Data">
-          <title>Company data · synthetic · Data</title>
-          <rect x="236.39999999999998" y="465" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="236.39999999999998" y="465" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(242.39999999999998 471) scale(0.6875)">
+        <g id="node-company" data-node-id="company" data-node-label="Company data" tabindex="0" role="button" aria-label="Focus Company data, synthetic, Tools and checks" aria-pressed="false" data-node-kind="database" data-node-sublabel="synthetic" data-node-context="Tools and checks">
+          <title>Company data · synthetic · Tools and checks</title>
+          <rect x="168" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="341" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(174 347) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="302.4" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Company data</text>
-          <text data-detail="context" x="302.4" y="503" class="t-muted" font-size="8" text-anchor="middle">synthetic</text>
+          <text data-node-label="" data-detail-anchor="" x="234" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Company data</text>
+          <text data-detail="context" x="234" y="379" class="t-muted" font-size="8" text-anchor="middle">synthetic</text>
         </g>
 
         <!-- Edge labels -->
-        <g data-detail="context" data-edge-from="supervisor" data-edge-to="researcher" data-edge-label="delegate" data-edge-key="0" data-edge-id="delegate">
-          <rect x="184" y="265" width="48.4" height="14" rx="3" class="c-mask"/>
-          <text x="208.2" y="275" class="t-backend" font-size="8" text-anchor="middle">delegate</text>
+
+
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="qualifier" data-edge-label="qualify" data-edge-key="2" data-edge-id="call-qualifier">
+          <rect x="402.7" y="146" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="424.5" y="156" class="t-backend" font-size="8" text-anchor="middle">qualify</text>
         </g>
-        <g data-detail="context" data-edge-from="researcher" data-edge-to="qualifier" data-edge-label="enriched lead" data-edge-key="1" data-edge-id="enriched">
-          <rect x="372.4" y="223" width="72.4" height="14" rx="3" class="c-mask"/>
-          <text x="408.59999999999997" y="233" class="t-muted" font-size="8" text-anchor="middle">enriched lead</text>
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="researcher" data-edge-label="research" data-edge-key="3" data-edge-id="call-researcher">
+          <rect x="266.3" y="146" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="290.5" y="156" class="t-backend" font-size="8" text-anchor="middle">research</text>
         </g>
 
+        <g data-detail="context" data-edge-from="researcher" data-edge-to="company" data-edge-label="lookup_company" data-edge-key="5" data-edge-id="lookup">
+          <rect x="55.4" y="223" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="94" y="233" class="t-database" font-size="8" text-anchor="middle">lookup_company</text>
+        </g>
 
-
-
-
-
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="label" data-edge-label="label + reason" data-edge-key="7" data-edge-id="result">
+          <rect x="435.4" y="99" width="77.2" height="14" rx="3" class="c-mask"/>
+          <text x="474" y="109" class="t-backend" font-size="8" text-anchor="middle">label + reason</text>
+        </g>
 
         <!-- Legend -->
         <g data-legend="" data-legend-bridge="">
@@ -5395,22 +5373,22 @@
       <div class="card">
         <div class="card-header">
           <div class="card-dot cyan"></div>
-          <h3>Rubric</h3>
+          <h3>How the Supervisor works</h3>
         </div>
         <ul>
-          <li>&bull; Fit and buyer role are hard gates</li>
-          <li>&bull; Need and intent are scored, so a lead is hot, warm or cold</li>
+          <li>&bull; It calls each agent as a subagent and gets the result back</li>
+          <li>&bull; Agents never call each other, the Supervisor decides the next step</li>
         </ul>
       </div>
 
       <div class="card">
         <div class="card-header">
           <div class="card-dot rose"></div>
-          <h3>Metrics</h3>
+          <h3>Rubric and metrics</h3>
         </div>
         <ul>
-          <li>&bull; Precision and recall of hot, and the 3x3 confusion matrix</li>
-          <li>&bull; Cost and latency per lead</li>
+          <li>&bull; Fit and buyer role are hard gates, need and intent are scored</li>
+          <li>&bull; Precision and recall of hot, the 3x3 matrix, cost and latency per lead</li>
         </ul>
       </div>
     </div>
