@@ -178,6 +178,7 @@ src/sales_agents/
   guardrail.py     draft checks
   approver.py      scripted checklist approver
   cli.py           the command line
+  web.py           the demo chat page (FastAPI, streams steps, approval in the browser)
   datagen.py, draftgen.py, replygen.py, reactivationgen.py, rfpgen.py   seeded synthetic sets
   agents/          qualifier, researcher, supervisor, writer, replies, routing, reactivation, rfp, baseline
   tools/           enrichment (company store), kb (product docs search), crm (MCP and guardrail wrapper)
