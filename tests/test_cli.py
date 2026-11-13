@@ -106,3 +106,14 @@ def test_terminal_edit_sends_the_edited_text_to_the_same_tool():
 
 def test_terminal_asks_again_on_an_unknown_answer():
     assert terminal_decision(REQUEST, ask=answers("maybe", "a"), out=lambda *a: None) == {"type": "approve"}
+
+
+def test_the_web_command_serves_the_demo_app(monkeypatch):
+    from sales_agents import cli
+
+    served = {}
+    monkeypatch.setattr("uvicorn.run", lambda app, **kw: served.update(app=app, **kw))
+
+    cli.main(["web", "--port", "8123"])
+
+    assert served["port"] == 8123 and served["app"].title == "sales-agents demo"

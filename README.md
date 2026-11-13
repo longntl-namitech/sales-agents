@@ -154,6 +154,7 @@ cp .env.example .env          # then set OPENAI_API_KEY
 uv run pytest                                  # offline, no tokens
 uv run python -m sales_agents outbound lead-0010            # run one lead, you approve the draft
 uv run python -m sales_agents outbound lead-0010 --scripted # the checklist approves instead
+uv run python -m sales_agents web                           # demo chat page at http://127.0.0.1:8000
 uv run python -m sales_agents.eval.report                   # the results table
 ```
 

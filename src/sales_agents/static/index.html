@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sales-agents demo</title>
+<style>
+  :root { --bg:#f6f7f9; --panel:#fff; --ink:#1c2430; --muted:#667085; --line:#e2e6ec; --accent:#2f5fd0; --ok:#1a7f4b; --bad:#b42318; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#12161c; --panel:#1b212a; --ink:#e6eaf0; --muted:#98a2b3; --line:#2a323d; --accent:#6c92f0; --ok:#4cc38a; --bad:#f97066; } }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; height:100vh; display:flex; flex-direction:column; }
+  header { padding:12px 16px; border-bottom:1px solid var(--line); background:var(--panel); display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+  header h1 { font-size:16px; margin:0 8px 0 0; }
+  select, button, textarea { font:inherit; color:inherit; }
+  select { padding:6px 8px; border:1px solid var(--line); border-radius:6px; background:var(--panel); min-width:0; max-width:100%; flex:1 1 260px; }
+  button { padding:6px 14px; border:1px solid var(--line); border-radius:6px; background:var(--panel); cursor:pointer; }
+  button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  button:disabled { opacity:.5; cursor:default; }
+  #chat { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .msg { max-width:min(720px, 100%); padding:10px 12px; border:1px solid var(--line); border-radius:10px; background:var(--panel); overflow-wrap:anywhere; white-space:pre-wrap; }
+  .msg.user { align-self:flex-end; background:var(--accent); color:#fff; border-color:var(--accent); }
+  .msg .who { font-size:12px; color:var(--muted); display:block; margin-bottom:2px; }
+  .msg.ok { border-color:var(--ok); } .msg.bad { border-color:var(--bad); }
+  .draft { font-family:ui-monospace, monospace; font-size:13px; background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:8px; margin:6px 0; white-space:pre-wrap; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  textarea { width:100%; min-height:140px; padding:8px; border:1px solid var(--line); border-radius:6px; background:var(--bg); }
+  pre { margin:6px 0 0; font-size:12px; white-space:pre-wrap; }
+</style>
+</head>
+<body>
+<header>
+  <h1>sales-agents demo</h1>
+  <select id="lead" aria-label="Lead"></select>
+  <button id="run" class="primary">Run lead</button>
+</header>
+<main id="chat" aria-live="polite"></main>
+<script>
+const chat = document.getElementById('chat'), pick = document.getElementById('lead'), runBtn = document.getElementById('run');
+const NAMES = { researcher: 'Researcher', qualifier: 'Qualifier', writer: 'Writer', crm_agent: 'CRM agent' };
+let runId = null;
+
+function bubble(who, text, cls = '') {
+  const el = document.createElement('div');
+  el.className = 'msg ' + cls;
+  if (who) { const w = document.createElement('span'); w.className = 'who'; w.textContent = who; el.append(w); }
+  if (text) el.append(document.createTextNode(text));
+  chat.append(el); chat.scrollTop = chat.scrollHeight;
+  return el;
+}
+
+async function consume(response) {
+  if (!response.ok) { bubble('error', (await response.json()).detail || response.statusText, 'bad'); runBtn.disabled = false; return; }
+  const reader = response.body.getReader(), decoder = new TextDecoder();
+  let buffer = '';
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    let cut;
+    while ((cut = buffer.indexOf('\n\n')) >= 0) {
+      const line = buffer.slice(0, cut); buffer = buffer.slice(cut + 2);
+      if (line.startsWith('data: ')) handle(JSON.parse(line.slice(6)));
+    }
+  }
+}
+
+function handle(e) {
+  if (e.type === 'started') runId = e.run_id;
+  else if (e.type === 'step') bubble(NAMES[e.agent] || e.agent, 'working on the lead...');
+  else if (e.type === 'tool') bubble(e.name, e.text, /block|refus|not /i.test(e.text) ? 'bad' : '');
+  else if (e.type === 'approval') approval(e.draft_text);
+  else if (e.type === 'result') result(e.record);
+}
+
+function approval(text) {
+  const el = bubble('Waiting for you', 'The Writer drafted this email. Nothing is recorded until you decide.');
+  const draft = document.createElement('div'); draft.className = 'draft'; draft.textContent = text;
+  const row = document.createElement('div'); row.className = 'row';
+  const mk = (label, cls, fn) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.onclick = fn; row.append(b); return b; };
+  const send = async (body) => { row.querySelectorAll('button').forEach(b => b.disabled = true); await consume(await fetch(`/api/runs/${runId}/decision`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })); runBtn.disabled = false; };
+  mk('Approve', 'primary', () => { bubble('You', 'Approve', 'user'); send({ type: 'approve' }); });
+  mk('Edit', '', () => {
+    const box = document.createElement('textarea'); box.value = text;
+    const go = document.createElement('button'); go.className = 'primary'; go.textContent = 'Send edited draft';
+    go.onclick = () => { bubble('You', 'Approve with edits', 'user'); box.disabled = true; go.disabled = true; send({ type: 'edit', text: box.value }); };
+    el.append(box, go);
+  });
+  mk('Reject', '', () => { const why = prompt('Reason?') || 'rejected by the reviewer'; bubble('You', 'Reject: ' + why, 'user'); send({ type: 'reject', message: why }); });
+  el.append(draft, row);
+  chat.scrollTop = chat.scrollHeight;
+  runBtn.disabled = true;
+}
+
+function result(record) {
+  const el = bubble('CRM', record ? `Label: ${record.label}${record.outreach ? '. Draft recorded.' : '. No draft recorded.'}` : 'No CRM record.', record && record.outreach ? 'ok' : '');
+  if (record) { const pre = document.createElement('pre'); pre.textContent = JSON.stringify(record, null, 2); el.append(pre); }
+  runBtn.disabled = false;
+}
+
+runBtn.onclick = async () => {
+  runBtn.disabled = true;
+  bubble('You', 'Run ' + pick.value, 'user');
+  await consume(await fetch('/api/runs', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ lead_id: pick.value }) }));
+};
+
+fetch('/api/leads').then(r => r.json()).then(leads => {
+  for (const l of leads) { const o = document.createElement('option'); o.value = l.lead_id; o.textContent = `${l.lead_id} - ${l.company_name} (${l.contact_role}, ${l.source})`; pick.append(o); }
+});
+bubble('', 'Pick a lead and press Run. The Supervisor hands the lead to Researcher, Qualifier, Writer and CRM agent. A hot lead stops here for your decision.');
+</script>
+</body>
+</html>

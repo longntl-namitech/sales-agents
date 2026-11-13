@@ -85,7 +85,17 @@ def main(argv: list[str] | None = None) -> None:
     outbound.add_argument("lead_id")
     outbound.add_argument("--scripted", action="store_true", help="answer approvals with the eval checklist instead of asking")
     outbound.add_argument("--crm-db", default="crm.sqlite3", help="sqlite file for the mock CRM (default crm.sqlite3)")
+    web = sub.add_parser("web", help="start the demo chat page")
+    web.add_argument("--port", type=int, default=8000)
+    web.add_argument("--crm-db", dest="web_crm_db", default="crm.sqlite3")
     args = parser.parse_args(argv)
+    if args.command == "web":
+        import uvicorn
+
+        from sales_agents.web import create_app
+
+        uvicorn.run(create_app(crm_db=args.web_crm_db), host="127.0.0.1", port=args.port)
+        return
     decide = scripted_decision(load_docs()) if args.scripted else terminal_decision
     run_outbound_cli(args.lead_id, decide=decide, crm_db=args.crm_db)
 
