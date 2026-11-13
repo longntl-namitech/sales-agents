@@ -5034,7 +5034,7 @@
         <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Orchestrator</text>
 
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="752" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Subagents</text>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Agents</text>
 
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="752" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Tools and checks</text>
@@ -5054,7 +5054,7 @@
         <path data-edge-from="supervisor" data-edge-to="qualifier" data-edge-label="decide" data-edge-key="2" data-edge-id="call-qualifier" data-composition-points="354,145;354,166;474,166;474,217" d="M 354 145 L 354 166 L 474 166 L 474 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <path data-edge-from="supervisor" data-edge-to="researcher" data-edge-label="extract" data-edge-key="3" data-edge-id="call-researcher" data-composition-points="340,145;340,166;234,166;234,217" d="M 340 145 L 340 166 L 234 166 L 234 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
         <path data-edge-from="rfp" data-edge-to="supervisor" data-edge-key="4" data-edge-id="rfp-in" data-composition-points="180,119;288,119" d="M 180 119 L 288 119" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="qualifier" data-edge-to="docs" data-edge-label="checks against" data-edge-key="5" data-edge-id="search" data-composition-points="474,269;474,290;392,290;392,367;408,367" d="M 474 269 L 474 290 L 392 290 L 392 367 L 408 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="researcher" data-edge-to="docs" data-edge-label="support check" data-edge-key="5" data-edge-id="support" data-composition-points="234,269;234,367;408,367" d="M 234 269 L 234 367 L 408 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
         <path data-edge-from="crm_agent" data-edge-to="approval" data-edge-label="write" data-edge-key="6" data-edge-id="write" data-composition-points="680,243;696,243;696,290;614,290;614,341" d="M 680 243 L 696 243 L 696 290 L 614 290 L 614 341" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
 
         <!-- Nodes -->
@@ -5081,30 +5081,30 @@
           <text data-detail="context" x="354" y="131" class="t-muted" font-size="8" text-anchor="middle">Deep Agent</text>
         </g>
 
-        <g id="node-researcher" data-node-id="researcher" data-node-label="Researcher" tabindex="0" role="button" aria-label="Focus Researcher, extracts requirements, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="extracts requirements" data-node-context="Subagents">
-          <title>Researcher · extracts requirements · Subagents</title>
+        <g id="node-researcher" data-node-id="researcher" data-node-label="Researcher" tabindex="0" role="button" aria-label="Focus Researcher, extracts the facts, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="extracts the facts" data-node-context="Agents">
+          <title>Researcher · extracts the facts · Agents</title>
           <rect x="168" y="217" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="168" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(174 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="234" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Researcher</text>
-          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">extracts requirements</text>
+          <text data-detail="context" x="234" y="255" class="t-muted" font-size="8" text-anchor="middle">extracts the facts</text>
         </g>
 
-        <g id="node-qualifier" data-node-id="qualifier" data-node-label="Qualifier" tabindex="0" role="button" aria-label="Focus Qualifier, bid or no-bid, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="bid or no-bid" data-node-context="Subagents">
-          <title>Qualifier · bid or no-bid · Subagents</title>
+        <g id="node-qualifier" data-node-id="qualifier" data-node-label="Decision rule" tabindex="0" role="button" aria-label="Focus Decision rule, thresholds in code, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="thresholds in code" data-node-context="Agents">
+          <title>Decision rule · thresholds in code · Agents</title>
           <rect x="408" y="217" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="408" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(414 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="474" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Qualifier</text>
-          <text data-detail="context" x="474" y="255" class="t-muted" font-size="8" text-anchor="middle">bid or no-bid</text>
+          <text data-node-label="" data-detail-anchor="" x="474" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Decision rule</text>
+          <text data-detail="context" x="474" y="255" class="t-muted" font-size="8" text-anchor="middle">thresholds in code</text>
         </g>
 
-        <g id="node-crm_agent" data-node-id="crm_agent" data-node-label="CRM agent" tabindex="0" role="button" aria-label="Focus CRM agent, records the decision, Subagents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="records the decision" data-node-context="Subagents">
-          <title>CRM agent · records the decision · Subagents</title>
+        <g id="node-crm_agent" data-node-id="crm_agent" data-node-label="CRM agent" tabindex="0" role="button" aria-label="Focus CRM agent, records the decision, Agents" aria-pressed="false" data-node-kind="backend" data-node-sublabel="records the decision" data-node-context="Agents">
+          <title>CRM agent · records the decision · Agents</title>
           <rect x="548" y="217" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="548" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(554 223) scale(0.6875)">
@@ -5167,9 +5167,9 @@
           <text x="287" y="156" class="t-backend" font-size="8" text-anchor="middle">extract</text>
         </g>
 
-        <g data-detail="context" data-edge-from="qualifier" data-edge-to="docs" data-edge-label="checks against" data-edge-key="5" data-edge-id="search">
-          <rect x="394.4" y="270" width="77.2" height="14" rx="3" class="c-mask"/>
-          <text x="433" y="280" class="t-database" font-size="8" text-anchor="middle">checks against</text>
+        <g data-detail="context" data-edge-from="researcher" data-edge-to="docs" data-edge-label="support check" data-edge-key="5" data-edge-id="support">
+          <rect x="284.8" y="347" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="321" y="357" class="t-database" font-size="8" text-anchor="middle">support check</text>
         </g>
         <g data-detail="context" data-edge-from="crm_agent" data-edge-to="approval" data-edge-label="write" data-edge-key="6" data-edge-id="write">
           <rect x="638" y="270" width="34" height="14" rx="3" class="c-mask"/>

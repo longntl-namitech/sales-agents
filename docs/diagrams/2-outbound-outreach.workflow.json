@@ -17,7 +17,7 @@
     },
     {
       "id": "agents",
-      "label": "Subagents"
+      "label": "Agents"
     },
     {
       "id": "tools",
@@ -77,7 +77,7 @@
     {
       "id": "guardrail",
       "lane": "tools",
-      "col": 4,
+      "col": 5,
       "type": "security",
       "label": "Guardrail",
       "sublabel": "check_draft",
@@ -86,7 +86,7 @@
     {
       "id": "approval",
       "lane": "tools",
-      "col": 5,
+      "col": 4,
       "type": "security",
       "label": "Human approval",
       "sublabel": "interrupt_on",
@@ -137,23 +137,23 @@
     {
       "id": "record",
       "from": "crm_agent",
-      "to": "guardrail",
+      "to": "approval",
       "variant": "security",
       "label": "record_outreach"
     },
     {
       "id": "passed",
-      "from": "guardrail",
-      "to": "approval",
+      "from": "approval",
+      "to": "guardrail",
       "variant": "security",
-      "label": "passed"
+      "label": "approved or edited"
     },
     {
       "id": "approved",
-      "from": "approval",
+      "from": "guardrail",
       "to": "crm_mock",
       "variant": "emphasis",
-      "label": "approved"
+      "label": "passed"
     }
   ]
 }

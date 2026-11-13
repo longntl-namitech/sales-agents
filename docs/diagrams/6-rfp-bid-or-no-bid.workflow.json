@@ -17,7 +17,7 @@
     },
     {
       "id": "agents",
-      "label": "Subagents"
+      "label": "Agents"
     },
     {
       "id": "tools",
@@ -53,7 +53,7 @@
       "col": 1,
       "type": "backend",
       "label": "Researcher",
-      "sublabel": "extracts requirements",
+      "sublabel": "extracts the facts",
       "width": 132
     },
     {
@@ -61,8 +61,8 @@
       "lane": "agents",
       "col": 3,
       "type": "backend",
-      "label": "Qualifier",
-      "sublabel": "bid or no-bid",
+      "label": "Decision rule",
+      "sublabel": "thresholds in code",
       "width": 132
     },
     {
@@ -137,13 +137,6 @@
       "toSide": "top"
     },
     {
-      "id": "search",
-      "from": "qualifier",
-      "to": "docs",
-      "variant": "dashed",
-      "label": "checks against"
-    },
-    {
       "id": "write",
       "from": "crm_agent",
       "to": "approval",
@@ -156,6 +149,13 @@
       "to": "crm_mock",
       "variant": "emphasis",
       "label": "approved"
+    },
+    {
+      "id": "support",
+      "from": "researcher",
+      "to": "docs",
+      "variant": "dashed",
+      "label": "support check"
     }
   ]
 }

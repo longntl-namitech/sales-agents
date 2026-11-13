@@ -34,3 +34,5 @@ logs/
 .DS_Store
 
 dev/
+# Mock CRM state from the command line
+crm.sqlite3
