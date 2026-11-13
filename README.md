@@ -25,14 +25,16 @@ Read these numbers with care. The gold labels come from the same rubric the Qual
 
 ## What it does
 
-The hero use case is lead qualification. The other use cases reuse the same agents.
+The hero use case is lead qualification. The other use cases reuse the same agents. Each one has its own diagram, as a PNG with an interactive HTML version next to it (download the HTML and open it in a browser).
 
-1. **Lead qualification:** decide which leads deserve a rep's time, as hot, warm or cold with a reason.
-2. **Outbound outreach:** draft a grounded first message for a qualified lead, check it, get approval, record it.
-3. **Reply handling:** classify a prospect's reply and propose the next step.
-4. **Inbound routing:** route a form or demo request.
-5. **Lead reactivation:** pick stale leads worth another touch.
-6. **RFP bid or no-bid:** a recommendation on whether to respond to an RFP.
+1. **Lead qualification:** decide which leads deserve a rep's time, as hot, warm or cold with a reason. [Diagram](docs/diagrams/1-qualification.png), [interactive](docs/diagrams/1-qualification.html).
+2. **Outbound outreach:** draft a grounded first message for a qualified lead, check it, get approval, record it. [Diagram](docs/diagrams/2-outbound-outreach.png), [interactive](docs/diagrams/2-outbound-outreach.html).
+3. **Reply handling:** classify a prospect's reply, draft a response, record the update. [Diagram](docs/diagrams/3-reply-handling.png), [interactive](docs/diagrams/3-reply-handling.html).
+4. **Inbound routing:** qualify a form or demo request and route it to a rep. [Diagram](docs/diagrams/4-inbound-routing.png), [interactive](docs/diagrams/4-inbound-routing.html).
+5. **Lead reactivation:** pick stale leads worth another touch and draft a message. [Diagram](docs/diagrams/5-reactivation.png), [interactive](docs/diagrams/5-reactivation.html).
+6. **RFP bid or no-bid:** a recommendation on whether to respond to an RFP, decision only. [Diagram](docs/diagrams/6-rfp-bid-or-no-bid.png), [interactive](docs/diagrams/6-rfp-bid-or-no-bid.html).
+
+The diagram sources are the `*.workflow.json` files next to them. Only the Qualifier exists today, so these diagrams show the planned flows.
 
 ## Architecture
 

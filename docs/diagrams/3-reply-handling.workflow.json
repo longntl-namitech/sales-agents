@@ -1,0 +1,54 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "3. Reply handling",
+    "quality_profile": "showcase",
+    "viewBox": [1112, 652],
+    "output": "docs/diagrams/3-reply-handling.html"
+  },
+  "lanes": [
+    { "id": "input", "label": "Input" },
+    { "id": "agents", "label": "Agents" },
+    { "id": "safety", "label": "Safety and approval", "variant": "exception" },
+    { "id": "data", "label": "Data" }
+  ],
+  "mainPath": ["reply", "classifier", "writer", "guardrail", "approval", "crm_agent", "crm_mock"],
+  "nodes": [
+    { "id": "reply", "lane": "input", "col": 0, "type": "external", "label": "Lead reply", "sublabel": "to an outreach", "width": 132 },
+    { "id": "classifier", "lane": "agents", "col": 1, "type": "backend", "label": "Reply classifier", "sublabel": "four categories", "width": 132 },
+    { "id": "writer", "lane": "agents", "col": 2, "type": "backend", "label": "Writer", "sublabel": "drafts a response", "width": 132 },
+    { "id": "kb", "lane": "data", "col": 2, "type": "database", "label": "Product docs", "sublabel": "retrieval", "width": 132 },
+    { "id": "guardrail", "lane": "safety", "col": 3, "type": "security", "label": "Guardrail", "sublabel": "checks the draft", "width": 132 },
+    { "id": "approval", "lane": "safety", "col": 4, "type": "security", "label": "Human approval", "sublabel": "decides", "width": 132 },
+    { "id": "crm_agent", "lane": "agents", "col": 5, "type": "backend", "label": "CRM agent", "sublabel": "updates the record", "width": 132 },
+    { "id": "crm_mock", "lane": "data", "col": 5, "type": "cloud", "label": "Mock CRM", "sublabel": "behind MCP", "width": 132 }
+  ],
+  "edges": [
+    { "id": "reply-in", "from": "reply", "to": "classifier", "variant": "default" },
+    { "id": "classified", "from": "classifier", "to": "writer", "label": "category", "variant": "emphasis" },
+    { "id": "grounding", "from": "kb", "to": "writer", "variant": "dashed" },
+    { "id": "draft", "from": "writer", "to": "guardrail", "label": "draft", "variant": "security" },
+    { "id": "passed", "from": "guardrail", "to": "approval", "label": "passed", "variant": "security" },
+    { "id": "approved", "from": "approval", "to": "crm_agent", "label": "approved", "variant": "emphasis" },
+    { "id": "mcp", "from": "crm_agent", "to": "crm_mock", "label": "MCP", "variant": "default" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Categories",
+      "items": [
+        "Interested, not interested, question or reschedule",
+        "An unclear reply is not forced into interested"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Metrics",
+      "items": [
+        "Reply classification accuracy",
+        "Correct CRM update rate"
+      ]
+    }
+  ]
+}

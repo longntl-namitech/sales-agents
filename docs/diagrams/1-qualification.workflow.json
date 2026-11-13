@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "1. Lead qualification",
+    "quality_profile": "showcase",
+    "viewBox": [1112, 652],
+    "output": "docs/diagrams/1-qualification.html"
+  },
+  "lanes": [
+    { "id": "input", "label": "Input" },
+    { "id": "agents", "label": "Agents" },
+    { "id": "result", "label": "Label" },
+    { "id": "data", "label": "Data" }
+  ],
+  "mainPath": ["outbound", "supervisor", "researcher", "qualifier", "hot"],
+  "nodes": [
+    { "id": "outbound", "lane": "input", "col": 0, "type": "external", "label": "Account list", "sublabel": "outbound", "width": 132 },
+    { "id": "inbound", "lane": "input", "col": 1, "type": "external", "label": "Form or demo", "sublabel": "inbound request", "width": 132 },
+    { "id": "supervisor", "lane": "agents", "col": 0, "type": "backend", "label": "Supervisor", "sublabel": "Deep Agent", "width": 132 },
+    { "id": "researcher", "lane": "agents", "col": 1, "type": "backend", "label": "Researcher", "sublabel": "enriches the lead", "width": 132 },
+    { "id": "qualifier", "lane": "agents", "col": 2, "type": "backend", "label": "Qualifier", "sublabel": "applies the rubric", "width": 132 },
+    { "id": "hot", "lane": "result", "col": 3, "type": "frontend", "label": "Hot", "sublabel": "counts as qualified", "width": 132 },
+    { "id": "warm", "lane": "result", "col": 4, "type": "frontend", "label": "Warm", "sublabel": "with a reason", "width": 132 },
+    { "id": "cold", "lane": "result", "col": 5, "type": "frontend", "label": "Cold", "sublabel": "with a reason", "width": 132 },
+    { "id": "enrichment", "lane": "data", "col": 1, "type": "database", "label": "Company data", "sublabel": "synthetic", "width": 132 }
+  ],
+  "edges": [
+    { "id": "outbound-in", "from": "outbound", "to": "supervisor", "variant": "default" },
+    { "id": "inbound-in", "from": "inbound", "to": "supervisor", "variant": "default" },
+    { "id": "delegate", "from": "supervisor", "to": "researcher", "label": "delegate", "variant": "emphasis" },
+    { "id": "lookup", "from": "enrichment", "to": "researcher", "variant": "dashed" },
+    { "id": "enriched", "from": "researcher", "to": "qualifier", "label": "enriched lead", "variant": "default" },
+    { "id": "to-hot", "from": "qualifier", "to": "hot", "variant": "emphasis" },
+    { "id": "to-warm", "from": "qualifier", "to": "warm", "variant": "default" },
+    { "id": "to-cold", "from": "qualifier", "to": "cold", "variant": "default" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Rubric",
+      "items": [
+        "Fit and buyer role are hard gates",
+        "Need and intent are scored, so a lead is hot, warm or cold"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Metrics",
+      "items": [
+        "Precision and recall of hot, and the 3x3 confusion matrix",
+        "Cost and latency per lead"
+      ]
+    }
+  ]
+}
