@@ -168,6 +168,16 @@ uv run pytest -m llm -s tests/agents
 
 Each live test estimates its tokens first and refuses to run above 1,000,000. Tests that call a real model carry the `llm` marker and are excluded from the default run. Each one rewrites its row in `results/measurements.json`.
 
+### Demo page
+
+`uv run python -m sales_agents web` serves a chat page. Pick a lead, watch the subagents work, and approve, edit or reject the draft in the browser. These screenshots are from a real run on `gpt-4.1-mini`.
+
+![Pick a lead](docs/screenshots/1-pick-lead.png)
+![The subagents at work](docs/screenshots/2-running.png)
+![Waiting for approval](docs/screenshots/3-approval.png)
+![Editing the draft](docs/screenshots/4-edit.png)
+![Result in the mock CRM](docs/screenshots/5-result.png)
+
 ## Layout
 
 ```
