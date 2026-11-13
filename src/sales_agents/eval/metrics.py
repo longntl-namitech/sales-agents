@@ -13,6 +13,11 @@ def precision_recall(
     return precision, recall
 
 
+def accuracy(y_true: list, y_pred: list) -> float:
+    """Share of cases predicted correctly. A None prediction is wrong and stays in the denominator."""
+    return sum(t == p for t, p in zip(y_true, y_pred)) / len(y_true) if y_true else 0.0
+
+
 def confusion_matrix(
     y_true: list[Label], y_pred: list[Label | None]
 ) -> dict[tuple[Label, Label | None], int]:
