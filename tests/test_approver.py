@@ -1,8 +1,6 @@
-import pytest
 
 from sales_agents.approver import MAX_BODY_WORDS, scripted_approve
 from sales_agents.draftgen import generate_drafts
-from sales_agents.schemas import Draft
 from sales_agents.tools.kb import load_docs
 
 DOCS = load_docs()

@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from sales_agents.eval.hand_review import agreement, write_sample
 from sales_agents.schemas import Draft
 from sales_agents.tools.kb import load_docs
@@ -20,6 +22,28 @@ def test_sample_records_the_checklist_verdict_and_leaves_the_human_blank(tmp_pat
     rows = [json.loads(line) for line in path.read_text().splitlines()]
     assert [r["checklist"] for r in rows] == ["approve", "reject"]
     assert all(r["human"] is None for r in rows)
+
+
+def test_writing_a_new_sample_never_overwrites_labels_a_human_has_entered(tmp_path):
+    path = tmp_path / "sample.jsonl"
+    write_sample([("a", GOOD)], DOCS, path)
+    rows = [json.loads(line) for line in path.read_text().splitlines()]
+    rows[0]["human"] = "approve"
+    path.write_text("\n".join(json.dumps(r) for r in rows))
+
+    with pytest.raises(FileExistsError, match="labels"):
+        write_sample([("b", BAD)], DOCS, path)
+
+    assert agreement(path) == (1, 1)
+
+
+def test_an_unlabelled_sample_can_be_replaced(tmp_path):
+    path = tmp_path / "sample.jsonl"
+    write_sample([("a", GOOD)], DOCS, path)
+
+    write_sample([("b", BAD)], DOCS, path)
+
+    assert json.loads(path.read_text().splitlines()[0])["id"] == "b"
 
 
 def test_agreement_is_none_until_a_human_labels_something(tmp_path):

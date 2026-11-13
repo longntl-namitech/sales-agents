@@ -10,6 +10,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
+from langchain_core.tools import tool
+
 DOCS_PATH = Path(__file__).parents[3] / "datasets" / "product_docs.md"
 
 STOPWORDS = frozenset(
@@ -52,3 +54,10 @@ def search_product_docs(query: str, k: int = 3) -> list[str]:
         scores.append((score, doc))
     ranked = sorted((s for s in scores if s[0] > 0), key=lambda s: s[0], reverse=True)
     return [doc for _, doc in ranked[:k]]
+
+
+@tool("search_product_docs")
+def search_product_docs_tool(query: str) -> str:
+    """Search the seller's product docs. Returns the best matching passages."""
+    hits = search_product_docs(query)
+    return "\n\n".join(hits) if hits else "no matching passages"

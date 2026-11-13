@@ -32,28 +32,28 @@
     "use_case": "Researcher",
     "n": 60,
     "metrics": {
-      "precision (hot)": 0.9523809523809523,
+      "precision (hot)": 1.0,
       "recall (hot)": 1.0,
       "errors": 0.0
     },
-    "tokens": 28187,
-    "latency_p50": 0.8374858959577978,
+    "tokens": 28252,
+    "latency_p50": 0.887188374530524,
     "date": "2026-11-13",
-    "note": "enrichment lifts hot precision by +0.152 over the plain Qualifier"
+    "note": "enrichment lifts hot precision by +0.200 over the plain Qualifier"
   },
   {
-    "name": "Supervisor (agents as tools)",
+    "name": "Supervisor (subagents)",
     "use_case": "Supervisor",
-    "n": 60,
+    "n": 30,
     "metrics": {
-      "precision (hot)": 0.9523809523809523,
+      "precision (hot)": 0.9090909090909091,
       "recall (hot)": 1.0,
       "errors": 0.0
     },
-    "tokens": 303470,
-    "latency_p50": 3.070987146347761,
+    "tokens": 446394,
+    "latency_p50": 4.6587219999637455,
     "date": "2026-11-13",
-    "note": "research then qualify through the Deep Agent"
+    "note": "first 30 of the 60 leads, a Researcher subagent then a Qualifier subagent"
   },
   {
     "name": "Writer + guardrail + approver",
@@ -76,8 +76,8 @@
       "CRM holds exactly the approved drafts": 1.0,
       "label accuracy in CRM": 1.0
     },
-    "tokens": 121191,
-    "latency_p50": 6.613361013820395,
+    "tokens": 339809,
+    "latency_p50": 13.05707853473723,
     "date": "2026-11-13",
     "note": "2 of 4 drafts approved"
   },
@@ -104,8 +104,8 @@
       "correct-rep rate": 1.0,
       "errors": 0.0
     },
-    "tokens": 11313,
-    "latency_p50": 0.9293551042210311,
+    "tokens": 11274,
+    "latency_p50": 0.844333354383707,
     "date": "2026-11-13",
     "note": "research, qualify, route by rules; latency is form to decision"
   },

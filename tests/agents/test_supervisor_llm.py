@@ -25,6 +25,8 @@ from sales_agents.eval.report import from_eval_report, save_measurement
 from sales_agents.eval.tokens import HARNESS_OVERHEAD_TOKENS, approx_tokens
 
 DATASET = Path(__file__).parents[2] / "datasets" / "leads_seed42.jsonl"
+N_LEADS = 30
+SUBAGENT_OVERHEAD_FACTOR = 3  # each subagent is its own Deep Agent, so assume about three times the tool design's overhead
 
 
 def compare(plain_model, agent, desk, cases, token_cap):
@@ -42,7 +44,7 @@ def compare(plain_model, agent, desk, cases, token_cap):
         prompt_tokens=prompt_tokens,
         calls_per_case=1,
         token_cap=token_cap,
-        overhead_per_case=HARNESS_OVERHEAD_TOKENS,
+        overhead_per_case=SUBAGENT_OVERHEAD_FACTOR * HARNESS_OVERHEAD_TOKENS,
     )
     return plain, supervised
 
@@ -50,13 +52,19 @@ def compare(plain_model, agent, desk, cases, token_cap):
 def test_comparison_wiring_with_fake_models():
     cases = load_leads(DATASET)[:1]
     lead_id = cases[0].lead.lead_id
-    supervisor = scripted(
-        tool_call("research_lead", {"lead_id": lead_id}, "c1"),
-        tool_call("qualify_lead", {"lead_id": lead_id}, "c2"),
-        AIMessage(content="done"),
-    )
-    desk = LeadDesk(models={"qualifier": scripted(verdict("cold"))})
-    agent = build_supervisor(Settings(), MemorySaver(), desk, models={"supervisor": supervisor})
+    models = {
+        "supervisor": scripted(
+            tool_call("task", {"description": f"Research lead {lead_id}", "subagent_type": "researcher"}, "c1"),
+            tool_call("task", {"description": f"Qualify lead {lead_id}", "subagent_type": "qualifier"}, "c2"),
+            AIMessage(content="done"),
+        ),
+        "researcher": scripted(AIMessage(content="no record")),
+        "qualifier": scripted(
+            tool_call("submit_qualification", {"lead_id": lead_id, "label": "cold", "reason": "x"}), AIMessage(content="Final label: cold")
+        ),
+    }
+    desk = LeadDesk()
+    agent = build_supervisor(Settings(), MemorySaver(), desk, models=models)
 
     plain, supervised = compare(scripted(verdict("cold")), agent, desk, cases, token_cap=1_000_000)
 
@@ -67,10 +75,10 @@ def test_comparison_wiring_with_fake_models():
 @pytest.mark.skipif(not os.environ.get("OPENAI_API_KEY") and not Path(".env").exists(), reason="no API key")
 def test_plain_qualifier_vs_supervisor_cost_and_latency():
     settings = get_settings()
-    cases = load_leads(DATASET)
+    cases = load_leads(DATASET)[:N_LEADS]  # a subset, so the estimate stays under 1M tokens
     cap = min(settings.eval_token_cap, SUBSET_TOKEN_LIMIT)
 
-    desk = LeadDesk(settings=settings)
+    desk = LeadDesk()
     plain, supervised = compare(
         get_chat_model(settings), build_supervisor(settings, MemorySaver(), desk), desk, cases, token_cap=cap
     )
@@ -78,4 +86,4 @@ def test_plain_qualifier_vs_supervisor_cost_and_latency():
     print()
     print(f"estimated tokens: plain {plain.estimated_tokens}, supervisor {supervised.estimated_tokens}")
     print(format_table({"plain + enrichment": plain, "supervisor": supervised}))
-    save_measurement(from_eval_report("Supervisor (agents as tools)", "Supervisor", supervised, note="research then qualify through the Deep Agent"))
+    save_measurement(from_eval_report("Supervisor (subagents)", "Supervisor", supervised, note=f"first {N_LEADS} of the 60 leads, a Researcher subagent then a Qualifier subagent"))

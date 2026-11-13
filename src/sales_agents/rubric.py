@@ -34,7 +34,7 @@ def _norm(value: str) -> str:
     return value.strip().lower()
 
 
-def _missing_fields(lead: Lead, company: CompanyRecord) -> list[str]:
+def missing_gate_fields(lead: Lead, company: CompanyRecord) -> list[str]:
     checks = {
         "employee count": company.employee_count,
         "industry": company.industry,
@@ -58,7 +58,7 @@ def _failed_gates(lead: Lead, company: CompanyRecord) -> list[str]:
 
 
 def explain_lead(lead: Lead, company: CompanyRecord) -> QualificationResult:
-    missing = _missing_fields(lead, company)
+    missing = missing_gate_fields(lead, company)
     if missing:
         return QualificationResult(
             label="cold", reason=f"Gate field missing: {', '.join(missing)}."

@@ -13,7 +13,7 @@ from datetime import date
 from pathlib import Path
 
 import pytest
-from fakes import scripted, tool_call, verdict
+from fakes import scripted, tool_call
 from langchain_core.callbacks import get_usage_metadata_callback
 from langchain_core.messages import AIMessage
 from langgraph.checkpoint.memory import MemorySaver
@@ -49,7 +49,7 @@ async def run_batch(cases, make_agent, raw_tools, docs):
         decisions[request["args"]["lead_id"]] = (decision["type"], request["args"]["draft_text"])
         return decision
 
-    agent, desk = make_agent(build_crm_tools(raw_tools, docs))
+    agent, desk = make_agent(raw_tools, docs)
     for case in cases:
         await run_outbound(agent, desk, case.lead, f"outbound-{case.lead.lead_id}", decide=logged)
     return decisions, await list_crm_records(raw_tools)
@@ -57,27 +57,35 @@ async def run_batch(cases, make_agent, raw_tools, docs):
 
 def test_batch_wiring_with_fake_models():
     case = pick(1)[0]  # a hot lead
+    lead_id = case.lead.lead_id
     store = CrmStore()
     good = 'Hi Dana,\n\nPipelane routes each qualified lead to a rep by territory and segment rules.\n\nReply "unsubscribe" and I will stop.'
-    steps = [
-        tool_call("research_lead", {"lead_id": case.lead.lead_id}, "c1"),
-        tool_call("qualify_lead", {"lead_id": case.lead.lead_id}, "c2"),
-        tool_call("upsert_lead", {"lead_id": case.lead.lead_id, "label": "hot", "notes": "x"}, "c3"),
-        tool_call("write_draft", {"lead_id": case.lead.lead_id}, "c4"),
-        tool_call("record_outreach", {"lead_id": case.lead.lead_id, "draft_text": good}, "c5"),
-        AIMessage(content="done"),
-    ]
 
-    def make_agent(crm_tools):
-        desk = LeadDesk(
-            models={"qualifier": scripted(verdict("hot")), "writer": scripted(tool_call("Draft", {"subject": "", "body": good}))}
-        )
-        agent = build_supervisor(Settings(), MemorySaver(), desk, models={"supervisor": scripted(*steps)}, crm_tools=crm_tools)
-        return agent, desk
+    def task(subagent, call_id):
+        return tool_call("task", {"description": f"Handle lead {lead_id}", "subagent_type": subagent}, call_id)
+
+    models = {
+        "supervisor": scripted(task("researcher", "c1"), task("qualifier", "c2"), task("crm_agent", "c3"), task("writer", "c4"), task("crm_agent", "c5"), AIMessage(content="done")),
+        "researcher": scripted(AIMessage(content="facts")),
+        "qualifier": scripted(tool_call("submit_qualification", {"lead_id": lead_id, "label": "hot", "reason": "x"}), AIMessage(content="Final label: hot")),
+        "writer": scripted(tool_call("save_draft", {"lead_id": lead_id, "subject": "", "body": good}), AIMessage(content="saved")),
+        "crm_agent": scripted(
+            tool_call("upsert_lead", {"lead_id": lead_id}, "u1"),
+            AIMessage(content="saved"),
+            tool_call("get_draft", {"lead_id": lead_id}, "g1"),
+            tool_call("record_outreach", {"lead_id": lead_id, "draft_text": good}, "r1"),
+            AIMessage(content="recorded"),
+        ),
+    }
+
+    def make_agent(raw_tools, docs):
+        desk = LeadDesk()
+        crm_tools = build_crm_tools(raw_tools, docs, results=desk.results.get)
+        return build_supervisor(Settings(), MemorySaver(), desk, models=models, crm_tools=crm_tools), desk
 
     decisions, records = asyncio.run(run_batch([case], make_agent, store_tools(store), load_docs()))
 
-    assert decisions[case.lead.lead_id][0] == "approve"
+    assert decisions[lead_id][0] == "approve"
     assert [r["outreach"] for r in records] == [good]
 
 
@@ -90,15 +98,16 @@ def test_crm_holds_exactly_the_approved_drafts(tmp_path):
         cases,
         prompt_tokens=approx_tokens(QUALIFIER_PROMPT) + approx_tokens(WRITER_PROMPT) + 400,
         calls_per_case=2,
-        overhead_per_case=3 * HARNESS_OVERHEAD_TOKENS,
+        overhead_per_case=6 * HARNESS_OVERHEAD_TOKENS,  # four subagents and the Supervisor, each its own Deep Agent. A factor of 5 came in 4% low
     )
     assert estimate < min(settings.eval_token_cap, SUBSET_TOKEN_LIMIT)
 
     async def scenario():
         raw_tools = await load_crm_tools(tmp_path / "crm.sqlite3")
 
-        def make_agent(crm_tools):
-            desk = LeadDesk(settings=settings)
+        def make_agent(tools, docs):
+            desk = LeadDesk()
+            crm_tools = build_crm_tools(tools, docs, results=desk.results.get)
             return build_supervisor(settings, MemorySaver(), desk, crm_tools=crm_tools), desk
 
         return await run_batch(cases, make_agent, raw_tools, load_docs())

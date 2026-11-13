@@ -43,7 +43,10 @@ def run_writer(model, cases, sample_path):
     drafts = [(c.lead.lead_id, draft_outreach(c.lead, c.company, model=model)) for c in cases]
     passed = sum(check_draft(d, docs).passed for _, d in drafts)
     approved = sum(scripted_approve(d, docs) == "approve" for _, d in drafts)
-    write_sample(drafts, docs, sample_path)
+    try:
+        write_sample(drafts, docs, sample_path)
+    except FileExistsError as exc:  # the owner has labelled the earlier sample, keep it
+        print(exc)
     return drafts, passed, approved
 
 

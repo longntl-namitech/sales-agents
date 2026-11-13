@@ -19,6 +19,9 @@ SAMPLE_PATH = Path(__file__).parents[3] / "datasets" / "hand_review_sample.jsonl
 
 
 def write_sample(items: list[tuple[str, Draft]], docs: list[str], path: Path = SAMPLE_PATH) -> None:
+    """Save drafts for review. Refuses to overwrite a file in which a human has already entered labels."""
+    if path.exists() and agreement(path) is not None:
+        raise FileExistsError(f"{path} already holds human labels, move it aside before writing a new sample")
     rows = [
         {
             "id": item_id,

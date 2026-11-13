@@ -9,6 +9,7 @@ from langchain_core.language_models import BaseChatModel
 
 from sales_agents.config import get_chat_model, get_settings
 from sales_agents.rubric import (
+    missing_gate_fields,
     BUYER_ROLES,
     HOT_MIN_SCORE,
     INTENT_SIGNALS,
@@ -58,6 +59,17 @@ def render_lead(lead: Lead, enrichment: CompanyRecord | None) -> str:
     return "\n".join(lines)
 
 
+def apply_gates(lead: Lead, company: CompanyRecord | None, result: QualificationResult) -> QualificationResult:
+    """A missing gate field makes the lead cold. The prompt says so, and this enforces it in code, because a
+    model can ignore a prompt. Without a company record the gate fields are unknown, so nothing is changed."""
+    if company is None or result.label == "cold":
+        return result
+    missing = missing_gate_fields(lead, company)
+    if not missing:
+        return result
+    return QualificationResult(label="cold", reason=f"missing {', '.join(missing)}, so the gate fails (model said {result.label}: {result.reason})")
+
+
 def qualify(
     lead: Lead,
     enrichment: CompanyRecord | None = None,
@@ -70,4 +82,4 @@ def qualify(
     )
     if not isinstance(result, QualificationResult):
         raise ValueError(f"model did not return a QualificationResult: {result!r}")
-    return result
+    return apply_gates(lead, enrichment, result)

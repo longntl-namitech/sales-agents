@@ -23,12 +23,12 @@ Every row comes from a run on 2026-11-13, recorded in [results/measurements.json
 |---|---|---|---|---|---|---|
 | Lead qualification | Rule baseline | 60 | precision (hot) 1.000, recall (hot) 1.000 | 0 | 0.00 | ceiling, same rubric as the gold labels |
 | Lead qualification | Qualifier (LLM) | 60 | precision (hot) 0.800, recall (hot) 1.000 | 26,982 | 0.94 | no enrichment |
-| Researcher | Qualifier + Researcher | 60 | precision (hot) 0.952, recall (hot) 1.000 | 28,187 | 0.84 | enrichment lifts hot precision by +0.152 |
-| Supervisor | Supervisor (agents as tools) | 60 | precision (hot) 0.952, recall (hot) 1.000 | 303,470 | 3.07 | research then qualify through the Deep Agent |
+| Researcher | Qualifier + Researcher | 60 | precision (hot) 1.000, recall (hot) 1.000 | 28,252 | 0.89 | enrichment lifts hot precision by +0.200 |
+| Supervisor | Supervisor (subagents) | 30 | precision (hot) 0.909, recall (hot) 1.000 | 446,394 | 4.66 | first 30 of the 60 leads, a Researcher subagent then a Qualifier subagent |
 | Outbound outreach | Writer + guardrail + approver | 20 | guardrail pass rate 0.700, approver acceptance rate 0.700 | 9,742 | n/a | drafts for gold-hot leads, not yet hand-reviewed |
-| Outbound outreach | Outbound path (Supervisor, MCP CRM, scripted approver) | 12 | CRM holds exactly the approved drafts 1.000, label accuracy in CRM 1.000 | 121,191 | 6.61 | 2 of 4 drafts approved |
+| Outbound outreach | Outbound path (Supervisor, MCP CRM, scripted approver) | 12 | CRM holds exactly the approved drafts 1.000, label accuracy in CRM 1.000 | 339,809 | 13.06 | 2 of 4 drafts approved |
 | Reply handling | Reply handling | 40 | classification accuracy 1.000, correct CRM update rate 1.000, accuracy on unclear and injected 1.000 | 25,143 | 1.96 | classify, update the CRM, draft, scripted approver |
-| Inbound routing | Inbound routing | 24 | correct-rep rate 1.000 | 11,313 | 0.93 | latency is form to decision |
+| Inbound routing | Inbound routing | 24 | correct-rep rate 1.000 | 11,274 | 0.84 | latency is form to decision |
 | Lead reactivation | Reactivation selector (LLM) | 40 | precision 1.000, recall 1.000, guardrail pass rate on drafts 0.333 | 6,128 | 0.79 | code gates on label and quiet days, model reads the history |
 | Lead reactivation | Reactivation baseline | 40 | precision 0.429, recall 1.000 | 0 | n/a | label and days only, ignores the history |
 | RFP bid or no-bid | RFP bid or no-bid | 40 | precision (bid) 1.000, recall (bid) 1.000, accuracy 1.000 | 33,062 | 1.55 | model extracts facts, thresholds in code decide |
@@ -37,16 +37,16 @@ Read these numbers with care. The 1.000 rows are not a quality claim. The gold l
 
 What the runs did show:
 
-- **Enrichment helps the Qualifier.** Hot precision went from 0.800 to 0.952 on the same 60 leads, recall stayed at 1.000, and the cost was about 1,200 more tokens. The lead notes already state the same facts, so the gain is not new information. Where it comes from was not isolated.
-- **Going through the Supervisor costs 10.7 times the tokens and 3.4 times the time**, for the same accuracy as calling the Qualifier directly (303,470 tokens against 28,305 and 3.07 s against 0.89 s on the same run). The Deep Agents harness adds its own prompt and tool schemas to every model call.
-- **The first Supervisor design lost accuracy.** It delegated to LLM subagents, and the Supervisor's own written task description dropped the company facts, so the Qualifier answered "size, industry or region unknown". Hot precision and recall were both 0.650 over 666,906 tokens. Passing data through code instead of through the Supervisor's words, with agents as tools that take only a lead id, brought a first fix to 0.833, and making `qualify_lead` research on demand brought it to 0.952. That first design is not in the repository, so the 0.650 run cannot be reproduced.
+- **Enrichment helps the Qualifier.** Hot precision went from 0.800 to 1.000 on the same 60 leads, recall stayed at 1.000, and the cost was about 1,300 more tokens. The lead notes already state the same facts, so part of the gain is not new information, and where it comes from was not isolated. The last step, 0.952 to 1.000, came from enforcing the missing-gate-field rule in code: one lead the model labelled hot while a gate field was missing is now cold. An earlier run of the same code without that enforcement scored 0.952.
+- **Going through the Supervisor costs about 31 times the tokens and 5.4 times the time** of calling the Qualifier directly, on the same 30 leads (446,394 tokens against 14,171, and 4.66 s against 0.86 s). Accuracy was within one lead: hot precision 0.909 for the Supervisor and 1.000 for the direct call, recall 1.000 for both. Each subagent is its own Deep Agent with the harness's prompt and tool schemas on every model call, and that is where the cost comes from.
+- **The first Supervisor design lost accuracy, and the cause was context.** The Supervisor wrote each subagent's task description itself, with the lead's facts in it, and that dropped the company facts, so the Qualifier answered "size, industry or region unknown". On 60 leads hot precision and recall were both 0.650, over 666,906 tokens. In the current design a subagent is given only a lead id and reads the exact notes and company facts from a shared `LeadDesk` through a context tool. The 0.650 run is not in the repository and is not recorded in `results/`, it comes from this project's run log, so it cannot be reproduced. An intermediate design that called plain functions as tools reached 0.952 on 60 leads at 303,470 tokens, also not recorded.
 - **The guardrail is conservative and over-blocks.** On planted faults it catches every one (`uv run python -m sales_agents.eval.outreach`: catch rate 1.000, false-block rate 0.000), but those faults were written by the same person as the detectors. On drafts a real model wrote, 14 of 20 passed. Of the 6 blocked, 4 flagged a number that matches the numeric suffix this dataset adds to company names (such as "Quill Dynamics 12"), which was inferred from the numbers and not checked in the drafts, and 3 flagged paraphrased product claims. One draft had both. Reactivation drafts passed 4 of 12. In a separate sample of 8 (not saved), 4 were blocked: 3 for paraphrased claims and 1 for a number. A human reviewer may approve many of these. That is what the hand-review sample is for.
 
 ## What was not measured
 
 - Any real lead, reply, RFP or CRM. All data is synthetic and the CRM is a mock.
 - Agreement between the scripted approver and a human. [datasets/hand_review_sample.jsonl](datasets/hand_review_sample.jsonl) holds 20 real drafts with the checklist's verdict and a blank `human` field. Fill it in, then run `uv run python -m sales_agents.eval.hand_review`.
-- Robustness to prompt injection beyond the injected cases in the reply, reactivation and RFP sets. The lead set has no injected case.
+- Robustness to prompt injection beyond the injected cases in the reply, reactivation and RFP sets. The lead set has no injected case. Several offline injection tests script the model to give the safe answer, so they show that the code follows the model's output, and not that a real model resists. Routing is the same: `route_lead` never reads the lead's text, so that test passes by construction.
 - A Langfuse trace, a different model, many seeds, or variance between runs.
 - Whether the guardrail's word-overlap check holds up on a larger product corpus.
 
@@ -61,7 +61,7 @@ The hero use case is lead qualification. The other use cases reuse the same agen
 5. **Lead reactivation:** pick quiet leads worth another touch and draft a message. [Diagram](docs/diagrams/5-reactivation.png), [interactive](docs/diagrams/5-reactivation.html).
 6. **RFP bid or no-bid:** a recommendation on whether to respond to an RFP, decision only. [Diagram](docs/diagrams/6-rfp-bid-or-no-bid.png), [interactive](docs/diagrams/6-rfp-bid-or-no-bid.html).
 
-Use cases 1 and 2 run through the Supervisor. Use cases 3 to 6 are typed pipeline functions that follow the diagram's steps and are measured on their own. The Supervisor is not wired to them yet, so those four diagrams show the target design. The diagram sources are the `*.workflow.json` files next to them.
+Use cases 1 and 2 run through the Supervisor and its subagents. Use cases 3 to 6 are typed pipeline functions that follow the diagram's steps and are measured on their own. The Supervisor is not wired to them yet, so those four diagrams show the target design. The diagram sources are the `*.workflow.json` files next to them.
 
 ## Architecture
 
@@ -69,25 +69,25 @@ Use cases 1 and 2 run through the Supervisor. Use cases 3 to 6 are typed pipelin
 
 [Open the interactive diagram](docs/architecture.html) (download it and open it in a browser). It supports pan, zoom, search and light or dark theme. The source is [docs/architecture.workflow.json](docs/architecture.workflow.json).
 
-The Supervisor sits in the middle. It calls the Researcher, Qualifier and Writer as tools that take only a lead id, and the CRM tools, and gets each result back, so the agents never call each other. The guardrail and the approval gate are not agents. They sit in front of the CRM write. `record_outreach` pauses for a human decision first, then the guardrail checks the text that was approved (an edited draft is checked too), and only then does the mock CRM record it.
+The Supervisor sits in the middle. It delegates to four subagents, the Researcher, Qualifier, Writer and CRM agent, and gets each result back, so the subagents never call each other. The guardrail and the approval gate are not agents. They sit in front of the CRM write. `record_outreach`, a tool of the CRM subagent, pauses for a human decision first, then the guardrail checks the text that was approved (an edited draft is checked too), and only then does the mock CRM record it.
 
 Design rules:
 
-- **Agents are plain typed functions.** Each takes a typed input and returns a typed output, so it can be evaluated alone against gold labels.
-- **The Supervisor is the Deep Agent.** It is built with `create_deep_agent` from [LangChain Deep Agents](https://github.com/langchain-ai/deepagents). Deep Agents runs on LangGraph, which supplies checkpointing and human-in-the-loop. The Supervisor reaches the agents through tools and not through LLM subagents, because passing data through a model's own words lost the company facts (see the results).
-- **Data moves through code, not through the Supervisor's words.** The agents share a per-run `LeadDesk`. The lead's free-text notes never reach the Supervisor model, and the label comes from the `qualify_lead` result.
-- **Safety rules live in code, not in prompts.** The approval gate is `interrupt_on` and the guardrail is inside the `record_outreach` tool. A rejected draft is never recorded, an edited draft records the edited text, and a draft the guardrail blocks is never recorded even if it was approved.
+- **Each agent's logic is a plain typed function.** The Qualifier, Writer and the others can be called directly and evaluated alone against gold labels, and the pipelines for use cases 3 to 6 call them that way. Under the Supervisor each one is a Deep Agents subagent with the same prompt.
+- **The Supervisor is the Deep Agent, and the agents are its subagents.** It is built with `create_deep_agent` from [LangChain Deep Agents](https://github.com/langchain-ai/deepagents). Deep Agents runs on LangGraph, which supplies checkpointing and human-in-the-loop, and the approval pause inside the CRM subagent resumes through the Supervisor's checkpointer.
+- **Context moves through a shared `LeadDesk`, not through the Supervisor's words.** A subagent is given only a lead id. It reads the lead through a context tool and hands its result back through a tool call (`submit_qualification`, `save_draft`). The lead's free-text notes never reach the Supervisor model.
+- **Safety rules live in code, not in prompts.** The approval gate is `interrupt_on` and the guardrail is inside the `record_outreach` tool. A rejected draft is never recorded, an edited draft records the edited text, and a draft the guardrail blocks is never recorded even if it was approved. The Qualifier's label has the rubric's gates applied in code, so a missing gate field is cold whatever the model said. The CRM label comes from the Qualifier's submitted result and not from what the CRM subagent passes in, and only a hot lead can get a draft recorded.
 - **Measure before wiring.** Each agent gets a number on its own before the Supervisor connects it.
 
 ## Agents
 
 ### Supervisor
 
-Receives a lead id and calls the other agents in order. It owns no business rules. With the outbound tools it saves the label and, for a hot lead, asks for a draft and records it. Implemented in [src/sales_agents/agents/supervisor.py](src/sales_agents/agents/supervisor.py).
+Receives a lead id and delegates to the subagents in order, giving each one only the lead id. It owns no business rules. With the outbound tools it has the CRM subagent save the label and, for a hot lead, has the Writer draft and the CRM subagent record it. Implemented in [src/sales_agents/agents/supervisor.py](src/sales_agents/agents/supervisor.py).
 
 ### Researcher
 
-Enriches a lead with company facts: size, industry, region and public signals. It is a lookup in a synthetic store and makes no model call, so it cannot invent a fact. An unknown company returns nothing. Its value is the change in Qualifier accuracy, shown above.
+Enriches a lead with company facts: size, industry, region and public signals. The function is a lookup in a synthetic store and makes no model call, so it cannot invent a fact. As a subagent, a model calls it and reports what it returns. An unknown company returns nothing. Its value is the change in Qualifier accuracy, shown above.
 
 ### Qualifier
 
@@ -159,7 +159,7 @@ uv run python -m sales_agents.eval.report                   # the results table
 
 The command line researches and qualifies the lead, saves its label to the mock CRM over MCP, and for a hot lead writes a draft and asks you to approve, edit or reject it. Nothing is sent. The mock CRM state is in `crm.sqlite3`.
 
-To measure again with the real model, which calls it and costs tokens (about 630,000 in all):
+To measure again with the real model, which calls it and costs tokens (about 1,000,000 in all):
 
 ```bash
 uv run pytest -m llm -s tests/agents

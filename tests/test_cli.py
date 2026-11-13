@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from fakes import scripted, tool_call, verdict
+from fakes import scripted, tool_call
 from langchain_core.messages import AIMessage
 
 from sales_agents.cli import run_outbound_cli, terminal_decision
@@ -16,17 +16,29 @@ GOOD = 'Hi Dana,\n\nPipelane routes each qualified lead to a rep by territory an
 
 def models():
     lead_id = LEAD.lead_id
+
+    def task(subagent, call_id):
+        return tool_call("task", {"description": f"Handle lead {lead_id}", "subagent_type": subagent}, call_id)
+
     return {
         "supervisor": scripted(
-            tool_call("research_lead", {"lead_id": lead_id}, "c1"),
-            tool_call("qualify_lead", {"lead_id": lead_id}, "c2"),
-            tool_call("upsert_lead", {"lead_id": lead_id, "label": "hot", "notes": "gates pass"}, "c3"),
-            tool_call("write_draft", {"lead_id": lead_id}, "c4"),
-            tool_call("record_outreach", {"lead_id": lead_id, "draft_text": GOOD}, "c5"),
+            task("researcher", "c1"), task("qualifier", "c2"), task("crm_agent", "c3"), task("writer", "c4"), task("crm_agent", "c5"),
             AIMessage(content="done"),
         ),
-        "qualifier": scripted(verdict("hot", "gates pass")),
-        "writer": scripted(tool_call("Draft", {"subject": "", "body": GOOD})),
+        "researcher": scripted(tool_call("research_lead", {"lead_id": lead_id}), AIMessage(content="facts")),
+        "qualifier": scripted(
+            tool_call("submit_qualification", {"lead_id": lead_id, "label": "hot", "reason": "gates pass"}), AIMessage(content="Final label: hot")
+        ),
+        "writer": scripted(
+            tool_call("save_draft", {"lead_id": lead_id, "subject": "", "body": GOOD}, "w1"), AIMessage(content="saved")
+        ),
+        "crm_agent": scripted(
+            tool_call("upsert_lead", {"lead_id": lead_id}, "u1"),
+            AIMessage(content="saved"),
+            tool_call("get_draft", {"lead_id": lead_id}, "g1"),
+            tool_call("record_outreach", {"lead_id": lead_id, "draft_text": GOOD}, "r1"),
+            AIMessage(content="recorded"),
+        ),
     }
 
 
@@ -47,6 +59,19 @@ def test_a_rejected_draft_leaves_the_record_without_outreach():
     record = run(lambda request: {"type": "reject", "message": "no"})
 
     assert record["label"] == "hot" and record["outreach"] is None
+
+
+def test_a_lead_with_a_draft_from_an_earlier_run_is_flagged():
+    store = CrmStore()
+    store.record_outreach(LEAD.lead_id, "an old draft")
+    printed = []
+
+    run_outbound_cli(
+        LEAD.lead_id, decide=lambda r: {"type": "reject", "message": "no"}, dataset=DATASET,
+        raw_tools=store_tools(store), models=models(), out=lambda *a: printed.append(" ".join(map(str, a))),
+    )
+
+    assert any("earlier run" in line for line in printed)
 
 
 def test_an_unknown_lead_id_is_a_clear_error():

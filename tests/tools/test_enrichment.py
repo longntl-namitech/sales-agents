@@ -1,6 +1,5 @@
 import socket
 
-import pytest
 
 from sales_agents.agents.researcher import research
 from sales_agents.schemas import CompanyRecord, Lead

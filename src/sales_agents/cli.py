@@ -62,8 +62,12 @@ def run_outbound_cli(
 
     async def scenario():
         tools = raw_tools if raw_tools is not None else await load_crm_tools(crm_db)
-        desk = LeadDesk(models=models, settings=settings)
-        agent = build_supervisor(settings, MemorySaver(), desk, models=models, crm_tools=build_crm_tools(tools, load_docs()))
+        desk = LeadDesk()
+        crm_tools = build_crm_tools(tools, load_docs(), results=desk.results.get)
+        agent = build_supervisor(settings, MemorySaver(), desk, models=models, crm_tools=crm_tools)
+        earlier = next((r for r in await list_crm_records(tools) if r["lead_id"] == lead_id), None)
+        if earlier and earlier.get("outreach"):
+            out("Note: this lead already has an outreach draft from an earlier run. It stays until a new draft is approved.")
         await run_outbound(agent, desk, lead, f"cli-{lead_id}", decide=decide)
         records = await list_crm_records(tools)
         return next((r for r in records if r["lead_id"] == lead_id), None)

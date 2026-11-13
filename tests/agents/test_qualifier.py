@@ -28,6 +28,28 @@ def test_returns_schema_object():
     assert result == QualificationResult(label="hot", reason="gates pass")
 
 
+def complete_company(**overrides):
+    fields = dict(company_name="Acme", employee_count=200, industry="software", region="europe", signals=[])
+    return CompanyRecord(**{**fields, **overrides})
+
+
+def test_a_hot_answer_for_a_lead_with_a_missing_gate_field_becomes_cold_in_code():
+    # The prompt says a missing gate field is cold. A model can ignore that, so code enforces it.
+    result = qualify(make_lead(), complete_company(employee_count=None), model=scripted(verdict("hot", "looks great")))
+
+    assert result.label == "cold" and "employee count" in result.reason
+
+
+def test_a_missing_contact_role_also_becomes_cold_in_code():
+    result = qualify(make_lead(role=None), complete_company(), model=scripted(verdict("warm")))
+
+    assert result.label == "cold" and "contact role" in result.reason
+
+
+def test_complete_leads_keep_the_label_the_model_gave():
+    assert qualify(make_lead(), complete_company(), model=scripted(verdict("hot", "ok"))).label == "hot"
+
+
 def test_notes_are_sent_as_untrusted_data_not_instructions():
     # A fake model ignores its prompt, so this checks how the prompt is built.
     # Whether a real model resists the injection is measured in the llm test.

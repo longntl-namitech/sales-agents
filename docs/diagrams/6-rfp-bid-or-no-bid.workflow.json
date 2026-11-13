@@ -17,7 +17,7 @@
     },
     {
       "id": "agents",
-      "label": "Agents"
+      "label": "Subagents"
     },
     {
       "id": "tools",

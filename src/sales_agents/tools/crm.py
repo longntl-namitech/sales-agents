@@ -12,6 +12,7 @@ actually approved, so an edited draft is checked too, and refuses on a violation
 
 import json
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 from langchain_core.tools import BaseTool, StructuredTool, tool
@@ -19,7 +20,7 @@ from langchain_mcp_adapters.client import MultiServerMCPClient
 
 from sales_agents.crm_mock.store import CrmStore
 from sales_agents.guardrail import check_draft
-from sales_agents.schemas import Draft
+from sales_agents.schemas import Draft, QualificationResult
 
 
 async def load_crm_tools(db_path: str | Path) -> list[BaseTool]:
@@ -75,15 +76,37 @@ def record_if_approved(
     return True
 
 
-def build_crm_tools(raw_tools: list[BaseTool], docs: list[str]) -> list[BaseTool]:
+def build_crm_tools(
+    raw_tools: list[BaseTool],
+    docs: list[str],
+    *,
+    results: Callable[[str], QualificationResult | None] | None = None,
+) -> list[BaseTool]:
+    """With `results`, the label and notes written to the CRM come from the Qualifier's result for that
+    lead and not from what the agent passes in, and only a hot lead can get a draft recorded."""
     raw = {t.name: t for t in raw_tools}
 
     @tool("record_outreach")
     async def record_outreach(lead_id: str, draft_text: str) -> str:
         """Record an outreach draft on the lead's CRM record. Refuses a draft that fails the guardrail."""
-        result = check_draft(Draft(body=draft_text), docs)
-        if not result.passed:
-            return "BLOCKED by the guardrail, nothing was recorded: " + "; ".join(result.violations)
+        if results is not None:
+            result = results(lead_id)
+            if result is None or result.label != "hot":
+                return "BLOCKED, nothing was recorded: only a lead the Qualifier labelled hot can get a draft"
+        verdict = check_draft(Draft(body=draft_text), docs)
+        if not verdict.passed:
+            return "BLOCKED by the guardrail, nothing was recorded: " + "; ".join(verdict.violations)
         return await raw["record_outreach"].ainvoke({"lead_id": lead_id, "draft_text": draft_text})
 
-    return [raw["upsert_lead"], record_outreach]
+    if results is None:
+        return [raw["upsert_lead"], record_outreach]
+
+    @tool("upsert_lead")
+    async def upsert_lead(lead_id: str, label: str = "", notes: str = "") -> str:
+        """Save the lead's qualification to the CRM. The label and reason come from the Qualifier's result."""
+        result = results(lead_id)
+        if result is None:
+            return "BLOCKED, nothing was saved: this lead has not been qualified yet"
+        return await raw["upsert_lead"].ainvoke({"lead_id": lead_id, "label": result.label, "notes": result.reason})
+
+    return [upsert_lead, record_outreach]
