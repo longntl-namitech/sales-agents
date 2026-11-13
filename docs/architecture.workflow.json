@@ -144,13 +144,6 @@
       "label": "research"
     },
     {
-      "id": "back-researcher",
-      "from": "researcher",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return"
-    },
-    {
       "id": "call-qualifier",
       "from": "supervisor",
       "to": "qualifier",
@@ -158,15 +151,6 @@
       "label": "qualify",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-qualifier",
-      "from": "qualifier",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "call-writer",
@@ -178,15 +162,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-writer",
-      "from": "writer",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-crm_agent",
       "from": "supervisor",
       "to": "crm_agent",
@@ -194,15 +169,6 @@
       "label": "record",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-crm_agent",
-      "from": "crm_agent",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "lookup",
@@ -238,32 +204,6 @@
       "to": "crm_mock",
       "variant": "emphasis",
       "label": "approved"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "amber",
-      "title": "After qualification",
-      "items": [
-        "Hot goes to the Writer for a draft",
-        "Warm and cold are saved to the CRM with their label and reason, no draft"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Rules live in code",
-      "items": [
-        "The guardrail and the approval gate run inside the record_outreach tool, not in prompts",
-        "A rejected draft never reaches the CRM as approved"
-      ]
     }
   ]
 }

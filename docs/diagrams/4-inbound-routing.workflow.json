@@ -126,15 +126,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-researcher",
-      "from": "researcher",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-qualifier",
       "from": "supervisor",
       "to": "qualifier",
@@ -144,15 +135,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-qualifier",
-      "from": "qualifier",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-crm_agent",
       "from": "supervisor",
       "to": "crm_agent",
@@ -160,15 +142,6 @@
       "label": "assign rep",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-crm_agent",
-      "from": "crm_agent",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "lookup",
@@ -183,24 +156,6 @@
       "to": "crm_mock",
       "variant": "default",
       "label": "MCP"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Routing and metrics",
-      "items": [
-        "The Supervisor picks the rep, a lead with no matching rep stays unassigned",
-        "Correct-rep rate, time from form to decision"
-      ]
     }
   ]
 }

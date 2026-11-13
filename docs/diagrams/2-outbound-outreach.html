@@ -5050,14 +5050,12 @@
 
         <!-- Edge paths -->
         <path data-edge-from="approval" data-edge-to="crm_mock" data-edge-label="approved" data-edge-key="0" data-edge-id="approved" data-composition-points="858.8,367;903.2,367;903.2,491;858.8,491" d="M 858.8 367 L 903.2 367 L 903.2 491 L 858.8 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="crm_agent" data-edge-to="supervisor" data-edge-key="1" data-edge-id="back-crm_agent" data-composition-points="607,217;607,166;361,166;361,145" d="M 607 217 L 607 166 L 361 166 L 361 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="writer" data-edge-to="supervisor" data-edge-key="2" data-edge-id="back-writer" data-composition-points="467,217;467,166;333,166;333,145" d="M 467 217 L 467 166 L 333 166 L 333 145" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
-        <path data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="3" data-edge-id="call-crm_agent" data-composition-points="375,145;375,166;621,166;621,217" d="M 375 145 L 375 166 L 621 166 L 621 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="4" data-edge-id="call-writer" data-composition-points="347,145;347,166;481,166;481,217" d="M 347 145 L 347 166 L 481 166 L 481 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
-        <path data-edge-from="lead" data-edge-to="supervisor" data-edge-key="5" data-edge-id="lead-in" data-composition-points="180,119;288,119" d="M 180 119 L 288 119" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
-        <path data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="6" data-edge-id="passed" data-composition-points="680,367;726.8,367" d="M 680 367 L 726.8 367" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="7" data-edge-id="record" data-composition-points="680,243;696,243;696,290;614,290;614,341" d="M 680 243 L 696 243 L 696 290 L 614 290 L 614 341" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
-        <path data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="8" data-edge-id="search" data-composition-points="408,243;20,243;20,367;408,367" d="M 408 243 L 20 243 L 20 367 L 408 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
+        <path data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="1" data-edge-id="call-crm_agent" data-composition-points="361,145;361,166;614,166;614,217" d="M 361 145 L 361 166 L 614 166 L 614 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="2" data-edge-id="call-writer" data-composition-points="347,145;347,166;474,166;474,217" d="M 347 145 L 347 166 L 474 166 L 474 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#arrowhead-emphasis)"/>
+        <path data-edge-from="lead" data-edge-to="supervisor" data-edge-key="3" data-edge-id="lead-in" data-composition-points="180,119;288,119" d="M 180 119 L 288 119" class="a-default" stroke-width="1.4" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="4" data-edge-id="passed" data-composition-points="680,367;726.8,367" d="M 680 367 L 726.8 367" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="5" data-edge-id="record" data-composition-points="680,243;696,243;696,290;614,290;614,341" d="M 680 243 L 696 243 L 696 290 L 614 290 L 614 341" class="a-security" stroke-width="1.4" marker-end="url(#arrowhead-security)"/>
+        <path data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="6" data-edge-id="search" data-composition-points="408,243;20,243;20,367;408,367" d="M 408 243 L 20 243 L 20 367 L 408 367" class="a-dashed" stroke-width="1.4" marker-end="url(#arrowhead-dashed)"/>
 
         <!-- Nodes -->
         <g id="node-lead" data-node-id="lead" data-node-label="Qualified lead" tabindex="0" role="button" aria-label="Focus Qualified lead, worth contacting, Orchestrator" aria-pressed="false" data-node-kind="external" data-node-sublabel="worth contacting" data-node-context="Orchestrator">
@@ -5157,26 +5155,24 @@
           <rect x="856.8" y="347" width="48.4" height="14" rx="3" class="c-mask"/>
           <text x="881" y="357" class="t-backend" font-size="8" text-anchor="middle">approved</text>
         </g>
-
-
-        <g data-detail="context" data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="3" data-edge-id="call-crm_agent">
-          <rect x="478.6" y="146" width="38.8" height="14" rx="3" class="c-mask"/>
-          <text x="498" y="156" class="t-backend" font-size="8" text-anchor="middle">record</text>
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="crm_agent" data-edge-label="record" data-edge-key="1" data-edge-id="call-crm_agent">
+          <rect x="468.1" y="146" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="487.5" y="156" class="t-backend" font-size="8" text-anchor="middle">record</text>
         </g>
-        <g data-detail="context" data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="4" data-edge-id="call-writer">
-          <rect x="397" y="146" width="34" height="14" rx="3" class="c-mask"/>
-          <text x="414" y="156" class="t-backend" font-size="8" text-anchor="middle">draft</text>
+        <g data-detail="context" data-edge-from="supervisor" data-edge-to="writer" data-edge-label="draft" data-edge-key="2" data-edge-id="call-writer">
+          <rect x="393.5" y="146" width="34" height="14" rx="3" class="c-mask"/>
+          <text x="410.5" y="156" class="t-backend" font-size="8" text-anchor="middle">draft</text>
         </g>
 
-        <g data-detail="context" data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="6" data-edge-id="passed">
+        <g data-detail="context" data-edge-from="guardrail" data-edge-to="approval" data-edge-label="passed" data-edge-key="4" data-edge-id="passed">
           <rect x="684" y="347" width="38.8" height="14" rx="3" class="c-mask"/>
           <text x="703.4" y="357" class="t-security" font-size="8" text-anchor="middle">passed</text>
         </g>
-        <g data-detail="context" data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="7" data-edge-id="record">
+        <g data-detail="context" data-edge-from="crm_agent" data-edge-to="guardrail" data-edge-label="record_outreach" data-edge-key="5" data-edge-id="record">
           <rect x="614" y="270" width="82" height="14" rx="3" class="c-mask"/>
           <text x="655" y="280" class="t-security" font-size="8" text-anchor="middle">record_outreach</text>
         </g>
-        <g data-detail="context" data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="8" data-edge-id="search">
+        <g data-detail="context" data-edge-from="writer" data-edge-to="docs" data-edge-label="search_product_docs" data-edge-key="6" data-edge-id="search">
           <rect x="163.4" y="223" width="101.2" height="14" rx="3" class="c-mask"/>
           <text x="214" y="233" class="t-database" font-size="8" text-anchor="middle">search_product_docs</text>
         </g>
@@ -5391,27 +5387,7 @@
 
     <!-- Info Cards -->
     <div class="cards">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot cyan"></div>
-          <h3>How the Supervisor works</h3>
-        </div>
-        <ul>
-          <li>&bull; It calls each agent as a subagent and gets the result back</li>
-          <li>&bull; Agents never call each other, the Supervisor decides the next step</li>
-        </ul>
-      </div>
 
-      <div class="card">
-        <div class="card-header">
-          <div class="card-dot rose"></div>
-          <h3>Checks and metrics</h3>
-        </div>
-        <ul>
-          <li>&bull; A failing draft or a rejection is never recorded as approved</li>
-          <li>&bull; Guardrail catch rate on planted faults, draft acceptance by the scripted checklist</li>
-        </ul>
-      </div>
     </div>
 
   </div>

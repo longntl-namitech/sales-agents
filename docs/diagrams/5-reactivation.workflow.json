@@ -128,13 +128,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-qualifier",
-      "from": "qualifier",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return"
-    },
-    {
       "id": "call-selector",
       "from": "supervisor",
       "to": "selector",
@@ -142,15 +135,6 @@
       "label": "select",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-selector",
-      "from": "selector",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "call-writer",
@@ -162,15 +146,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-writer",
-      "from": "writer",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-crm_agent",
       "from": "supervisor",
       "to": "crm_agent",
@@ -178,15 +153,6 @@
       "label": "record",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-crm_agent",
-      "from": "crm_agent",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "record",
@@ -208,24 +174,6 @@
       "to": "crm_mock",
       "variant": "emphasis",
       "label": "approved"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Selection and metrics",
-      "items": [
-        "A recently active lead is not selected",
-        "Correct selection against gold labels, guardrail pass rate on the messages"
-      ]
     }
   ]
 }

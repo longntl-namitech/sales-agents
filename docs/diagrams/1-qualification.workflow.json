@@ -123,15 +123,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-researcher",
-      "from": "researcher",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-qualifier",
       "from": "supervisor",
       "to": "qualifier",
@@ -141,38 +132,11 @@
       "toSide": "top"
     },
     {
-      "id": "back-qualifier",
-      "from": "qualifier",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "lookup",
       "from": "researcher",
       "to": "company",
       "variant": "dashed",
       "label": "lookup_company"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Rubric and metrics",
-      "items": [
-        "Fit and buyer role are hard gates, need and intent are scored",
-        "Precision and recall of hot, the 3x3 matrix, cost and latency per lead"
-      ]
     }
   ]
 }

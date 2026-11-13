@@ -119,15 +119,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-researcher",
-      "from": "researcher",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-qualifier",
       "from": "supervisor",
       "to": "qualifier",
@@ -137,15 +128,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-qualifier",
-      "from": "qualifier",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-crm_agent",
       "from": "supervisor",
       "to": "crm_agent",
@@ -153,15 +135,6 @@
       "label": "record",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-crm_agent",
-      "from": "crm_agent",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "search",
@@ -183,24 +156,6 @@
       "to": "crm_mock",
       "variant": "emphasis",
       "label": "approved"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Scope and metrics",
-      "items": [
-        "The decision only, no proposal drafting, a missing budget or deadline must not force a bid",
-        "Precision and recall of bid, cost and latency per RFP"
-      ]
     }
   ]
 }

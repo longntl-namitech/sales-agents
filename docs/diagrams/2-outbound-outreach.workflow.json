@@ -119,15 +119,6 @@
       "toSide": "top"
     },
     {
-      "id": "back-writer",
-      "from": "writer",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "id": "call-crm_agent",
       "from": "supervisor",
       "to": "crm_agent",
@@ -135,15 +126,6 @@
       "label": "record",
       "fromSide": "bottom",
       "toSide": "top"
-    },
-    {
-      "id": "back-crm_agent",
-      "from": "crm_agent",
-      "to": "supervisor",
-      "variant": "dashed",
-      "role": "return",
-      "fromSide": "top",
-      "toSide": "bottom"
     },
     {
       "id": "search",
@@ -172,24 +154,6 @@
       "to": "crm_mock",
       "variant": "emphasis",
       "label": "approved"
-    }
-  ],
-  "cards": [
-    {
-      "dot": "cyan",
-      "title": "How the Supervisor works",
-      "items": [
-        "It calls each agent as a subagent and gets the result back",
-        "Agents never call each other, the Supervisor decides the next step"
-      ]
-    },
-    {
-      "dot": "rose",
-      "title": "Checks and metrics",
-      "items": [
-        "A failing draft or a rejection is never recorded as approved",
-        "Guardrail catch rate on planted faults, draft acceptance by the scripted checklist"
-      ]
     }
   ]
 }
