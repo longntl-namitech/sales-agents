@@ -24,6 +24,8 @@ packages = ["src/sales_agents"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["tests"]
+addopts = "-m 'not llm'"
 markers = [
     "llm: calls a real model, run only through the token guard",
 ]
