@@ -8,6 +8,8 @@ stay None.
 from functools import lru_cache
 from pathlib import Path
 
+from langchain_core.tools import tool
+
 from sales_agents.datagen import load_leads
 from sales_agents.schemas import CompanyRecord
 
@@ -27,3 +29,10 @@ def lookup_company(company_name: str, store: dict[str, CompanyRecord] | None = N
     """Look up a company in the synthetic store. Returns None when it is not there."""
     store = load_store() if store is None else store
     return store.get(_key(company_name))
+
+
+@tool("lookup_company")
+def lookup_company_tool(company_name: str) -> str:
+    """Look up a company's size, industry, region and public signals in the synthetic store."""
+    record = lookup_company(company_name)
+    return record.model_dump_json() if record else "no record found"

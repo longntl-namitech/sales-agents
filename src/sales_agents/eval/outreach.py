@@ -42,3 +42,10 @@ def score_outreach(
         approver_accept_rate_clean=_rate(sum(scripted_approve(p.draft, docs) == "approve" for p in clean), len(clean)),
         approver_reject_rate_faulty=_rate(sum(scripted_approve(p.draft, docs) == "reject" for p in faulty), len(faulty)),
     )
+
+
+if __name__ == "__main__":
+    from sales_agents.draftgen import generate_drafts
+    from sales_agents.tools.kb import load_docs
+
+    print(score_outreach(generate_drafts(seed=42), load_docs()))

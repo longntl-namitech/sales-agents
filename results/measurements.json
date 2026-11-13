@@ -1,0 +1,155 @@
+[
+  {
+    "name": "Rule baseline",
+    "use_case": "Lead qualification",
+    "n": 60,
+    "metrics": {
+      "precision (hot)": 1.0,
+      "recall (hot)": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 0,
+    "latency_p50": 1.4998950064182281e-06,
+    "date": "2026-11-13",
+    "note": "ceiling, same rubric as the gold labels"
+  },
+  {
+    "name": "Qualifier (LLM)",
+    "use_case": "Lead qualification",
+    "n": 60,
+    "metrics": {
+      "precision (hot)": 0.8,
+      "recall (hot)": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 26982,
+    "latency_p50": 0.9411620208993554,
+    "date": "2026-11-13",
+    "note": "openai:gpt-4.1-mini, no enrichment"
+  },
+  {
+    "name": "Qualifier + Researcher",
+    "use_case": "Researcher",
+    "n": 60,
+    "metrics": {
+      "precision (hot)": 0.9523809523809523,
+      "recall (hot)": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 28187,
+    "latency_p50": 0.8374858959577978,
+    "date": "2026-11-13",
+    "note": "enrichment lifts hot precision by +0.152 over the plain Qualifier"
+  },
+  {
+    "name": "Supervisor (agents as tools)",
+    "use_case": "Supervisor",
+    "n": 60,
+    "metrics": {
+      "precision (hot)": 0.9523809523809523,
+      "recall (hot)": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 303470,
+    "latency_p50": 3.070987146347761,
+    "date": "2026-11-13",
+    "note": "research then qualify through the Deep Agent"
+  },
+  {
+    "name": "Writer + guardrail + approver",
+    "use_case": "Outbound outreach",
+    "n": 20,
+    "metrics": {
+      "guardrail pass rate": 0.7,
+      "approver acceptance rate": 0.7
+    },
+    "tokens": 9742,
+    "latency_p50": null,
+    "date": "2026-11-13",
+    "note": "drafts for gold-hot leads, scripted approver, not yet hand-reviewed"
+  },
+  {
+    "name": "Outbound path (Supervisor, MCP CRM, scripted approver)",
+    "use_case": "Outbound outreach",
+    "n": 12,
+    "metrics": {
+      "CRM holds exactly the approved drafts": 1.0,
+      "label accuracy in CRM": 1.0
+    },
+    "tokens": 121191,
+    "latency_p50": 6.613361013820395,
+    "date": "2026-11-13",
+    "note": "2 of 4 drafts approved"
+  },
+  {
+    "name": "Reply handling",
+    "use_case": "Reply handling",
+    "n": 40,
+    "metrics": {
+      "classification accuracy": 1.0,
+      "correct CRM update rate": 1.0,
+      "accuracy on unclear and injected": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 25143,
+    "latency_p50": 1.9645813750103116,
+    "date": "2026-11-13",
+    "note": "classify, update the CRM, draft, scripted approver"
+  },
+  {
+    "name": "Inbound routing",
+    "use_case": "Inbound routing",
+    "n": 24,
+    "metrics": {
+      "correct-rep rate": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 11313,
+    "latency_p50": 0.9293551042210311,
+    "date": "2026-11-13",
+    "note": "research, qualify, route by rules; latency is form to decision"
+  },
+  {
+    "name": "Reactivation selector (LLM)",
+    "use_case": "Lead reactivation",
+    "n": 40,
+    "metrics": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "guardrail pass rate on drafts": 0.3333333333333333,
+      "errors": 0.0
+    },
+    "tokens": 6128,
+    "latency_p50": 0.7852141454350203,
+    "date": "2026-11-13",
+    "note": "code gates on label and quiet days, model reads the history"
+  },
+  {
+    "name": "Reactivation baseline (label and days only)",
+    "use_case": "Lead reactivation",
+    "n": 40,
+    "metrics": {
+      "precision": 0.42857142857142855,
+      "recall": 1.0
+    },
+    "tokens": 0,
+    "latency_p50": null,
+    "date": "2026-11-13",
+    "note": "ignores the history text"
+  },
+  {
+    "name": "RFP bid or no-bid",
+    "use_case": "RFP bid or no-bid",
+    "n": 40,
+    "metrics": {
+      "precision (bid)": 1.0,
+      "recall (bid)": 1.0,
+      "accuracy": 1.0,
+      "errors": 0.0
+    },
+    "tokens": 33062,
+    "latency_p50": 1.5456585206557065,
+    "date": "2026-11-13",
+    "note": "model extracts facts, thresholds in code decide"
+  }
+]

@@ -6,9 +6,15 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "deepagents==0.7.37",
+    "fastapi>=0.162.5",
+    "langchain-mcp-adapters>=0.3.2",
     "langchain[openai]",
+    "mcp>=1.30.0",
     "pydantic-settings",
 ]
+
+[project.optional-dependencies]
+tracing = ["langfuse"]
 
 [dependency-groups]
 dev = [

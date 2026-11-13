@@ -1,5 +1,5 @@
 from sales_agents.datagen import generate_leads, template_text
-from sales_agents.eval.tokens import OUTPUT_TOKENS_PER_CALL, estimate_tokens
+from sales_agents.eval.tokens import HARNESS_OVERHEAD_TOKENS, OUTPUT_TOKENS_PER_CALL, estimate_tokens
 
 CASES = generate_leads(10, seed=1, write_text=template_text)
 
@@ -9,6 +9,14 @@ def test_estimate_counts_input_and_output_tokens():
 
     # Output is counted, and the lead text is counted on top of it.
     assert base > len(CASES) * OUTPUT_TOKENS_PER_CALL
+
+
+def test_overhead_per_case_is_added_once_per_case():
+    base = estimate_tokens(CASES, prompt_tokens=0, calls_per_case=3)
+
+    assert estimate_tokens(CASES, prompt_tokens=0, calls_per_case=3, overhead_per_case=HARNESS_OVERHEAD_TOKENS) == (
+        base + HARNESS_OVERHEAD_TOKENS * len(CASES)
+    )
 
 
 def test_estimate_scales_with_prompt_and_calls():

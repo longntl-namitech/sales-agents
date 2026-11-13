@@ -22,9 +22,12 @@ def measure(
     prompt_tokens: int,
     calls_per_case: int,
     token_cap: int,
+    overhead_per_case: int = 0,
 ) -> EvalReport:
     """Run fn over the cases with the token guard and real usage counting."""
-    estimate = estimate_tokens(cases, prompt_tokens=prompt_tokens, calls_per_case=calls_per_case)
+    estimate = estimate_tokens(
+        cases, prompt_tokens=prompt_tokens, calls_per_case=calls_per_case, overhead_per_case=overhead_per_case
+    )
     with get_usage_metadata_callback() as usage:
         return run_eval(
             cases,

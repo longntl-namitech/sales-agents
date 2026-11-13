@@ -18,6 +18,7 @@ from sales_agents.agents.qualifier import SYSTEM_PROMPT, qualify
 from sales_agents.config import get_chat_model, get_settings
 from sales_agents.datagen import load_leads
 from sales_agents.eval.harness import format_table, run_eval
+from sales_agents.eval.report import from_eval_report, save_measurement
 from sales_agents.eval.tokens import approx_tokens, estimate_tokens
 
 DATASET = Path(__file__).parents[2] / "datasets" / "leads_seed42.jsonl"
@@ -62,3 +63,5 @@ def test_real_qualifier_row_next_to_baseline():
     print()
     print(f"estimated tokens: {qualifier_report.estimated_tokens}, used: {qualifier_report.cost}")
     print(format_table({"rule baseline": baseline_report, f"LLM {settings.model}": qualifier_report}))
+    save_measurement(from_eval_report("Rule baseline", "Lead qualification", baseline_report, note="ceiling, same rubric as the gold labels"))
+    save_measurement(from_eval_report("Qualifier (LLM)", "Lead qualification", qualifier_report, note=f"{settings.model}, no enrichment"))
