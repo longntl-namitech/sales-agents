@@ -5,9 +5,12 @@ at record_outreach: the draft arrives with Approve, Edit and Reject buttons. Onl
 allow-list are answered. Nothing is ever sent to a lead.
 """
 
+import logging
 from collections.abc import AsyncIterator, Awaitable, Callable
 
 from sales_agents.runner import RunManager
+
+log = logging.getLogger(__name__)
 
 LIMIT = 4096  # Telegram's maximum message length
 
@@ -101,22 +104,32 @@ class TelegramFront:
         await self._consume(chat_id, events)
 
     async def _consume(self, chat_id: int, events: AsyncIterator[dict]) -> None:
-        async for event in events:
-            if event["type"] == "started":
-                self._chats[chat_id] = {"run_id": event["run_id"], "pending": False, "awaiting_edit": False}
-                await self._say(chat_id, f"Running {event['company_name']}...")
-            elif event["type"] == "step":
-                await self._say(chat_id, STEPS.get(event["agent"], f"{event['agent']}..."))
-            elif event["type"] == "tool":
-                await self._say(chat_id, f"{event['name']}: {event['text']}")
-            elif event["type"] == "approval":
-                state = self._chats[chat_id]
-                state["pending"] = True
-                run_id = state["run_id"]
-                buttons = [("Approve", f"a:{run_id}"), ("Edit", f"e:{run_id}"), ("Reject", f"r:{run_id}")]
-                await self._say(chat_id, event["draft_text"], buttons)
-            elif event["type"] == "result":
-                await self._say(chat_id, _result_line(event["record"]))
+        try:
+            async for event in events:
+                await self._handle(chat_id, event)
+        except Exception as exc:
+            log.exception("run failed")
+            state = self._chats.pop(chat_id, None)
+            if state:
+                self._runner.drop(state["run_id"])
+            await self._say(chat_id, f"The run failed: {type(exc).__name__}. Pick a lead to try again.")
+
+    async def _handle(self, chat_id: int, event: dict) -> None:
+        if event["type"] == "started":
+            self._chats[chat_id] = {"run_id": event["run_id"], "pending": False, "awaiting_edit": False}
+            await self._say(chat_id, f"Running {event['company_name']}...")
+        elif event["type"] == "step":
+            await self._say(chat_id, STEPS.get(event["agent"], f"{event['agent']}..."))
+        elif event["type"] == "tool":
+            await self._say(chat_id, f"{event['name']}: {event['text']}")
+        elif event["type"] == "approval":
+            state = self._chats[chat_id]
+            state["pending"] = True
+            run_id = state["run_id"]
+            buttons = [("Approve", f"a:{run_id}"), ("Edit", f"e:{run_id}"), ("Reject", f"r:{run_id}")]
+            await self._say(chat_id, event["draft_text"], buttons)
+        elif event["type"] == "result":
+            await self._say(chat_id, _result_line(event["record"]))
 
 
 def _result_line(record: dict | None) -> str:

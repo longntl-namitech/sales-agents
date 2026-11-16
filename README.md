@@ -25,7 +25,7 @@ Pick a lead, watch the subagents work, then approve, edit or reject the draft. M
 
 ## Telegram
 
-The same approval flow in a chat, for the sales rep: pick a lead, watch the steps, then approve, edit or reject the draft. Set `SALES_AGENTS_TELEGRAM_BOT_TOKEN` and `SALES_AGENTS_TELEGRAM_ALLOWED_CHATS` (comma-separated chat ids). The bot answers only private chats on that list and refuses to start without it. A paused run lives in memory and is lost on restart. Slack, Teams, Zalo, email, a real CRM and WhatsApp are not built.
+The same approval flow in a chat, for the sales rep: pick a lead, watch the steps, then approve, edit or reject the draft. Set `SALES_AGENTS_TELEGRAM_BOT_TOKEN` and `SALES_AGENTS_TELEGRAM_ALLOWED_CHATS` (comma-separated chat ids). The bot answers only private chats on that list and refuses to start without it. A paused run lives in memory and is lost on restart. The bot handles one update at a time, so a run in progress holds up every chat. Slack, Teams, Zalo, email, a real CRM and WhatsApp are not built.
 
 ## Getting started
 

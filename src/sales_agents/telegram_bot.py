@@ -9,6 +9,7 @@ The bot refuses to start without either. A paused run lives in memory and is los
 from pathlib import Path
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.error import TelegramError
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, filters
 
 from sales_agents.config import Settings, allowed_chat_ids, get_settings
@@ -30,7 +31,10 @@ def build_application(settings: Settings, front: TelegramFront | None = None, *,
         await front.on_start(update.effective_chat.id)
 
     async def button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-        await update.callback_query.answer()
+        try:
+            await update.callback_query.answer()
+        except TelegramError:
+            pass  # a tap that waited behind a long run is too old to answer, but it still counts
         await front.on_callback(update.effective_chat.id, update.callback_query.data)
 
     async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

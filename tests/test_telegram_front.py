@@ -176,6 +176,33 @@ def test_a_group_chat_is_ignored():
     assert sent == []
 
 
+def test_a_run_that_fails_tells_the_chat_and_frees_it():
+    async def boom():
+        yield {"type": "started", "run_id": "r1", "lead_id": "x", "company_name": "X"}
+        raise RuntimeError("model down")
+
+    class BrokenRunner:
+        async def start(self, lead_id):
+            return boom()
+
+        def drop(self, run_id):
+            pass
+
+    sent = []
+
+    async def send(chat_id, text, buttons=None):
+        sent.append((chat_id, text, buttons))
+
+    front = TelegramFront(BrokenRunner(), send, allowed=frozenset({CHAT}))
+
+    asyncio.run(front.run_lead(CHAT, "x"))
+    failed = sent[-1][1]
+    asyncio.run(front.on_callback(CHAT, "a:r1"))
+
+    assert "failed" in failed and "RuntimeError" in failed
+    assert "no longer waiting" in sent[-1][1]
+
+
 def test_the_run_cap_stops_further_runs_in_a_chat():
     front, sent, _ = setup(max_runs=1)
     asyncio.run(front.run_lead(CHAT, LEAD.lead_id))
