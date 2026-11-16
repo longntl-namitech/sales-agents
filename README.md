@@ -23,6 +23,10 @@ Cases 1 and 2 run through the Supervisor. Cases 3 to 6 are pipeline functions, m
 
 Pick a lead, watch the subagents work, then approve, edit or reject the draft. More screenshots in [docs/screenshots](docs/screenshots).
 
+## Telegram
+
+The same approval flow in a chat, for the sales rep: pick a lead, watch the steps, then approve, edit or reject the draft. Set `SALES_AGENTS_TELEGRAM_BOT_TOKEN` and `SALES_AGENTS_TELEGRAM_ALLOWED_CHATS` (comma-separated chat ids). The bot answers only private chats on that list and refuses to start without it. A paused run lives in memory and is lost on restart. Slack, Teams, Zalo, email, a real CRM and WhatsApp are not built.
+
 ## Getting started
 
 Python 3.11+ and [uv](https://docs.astral.sh/uv/).
@@ -32,6 +36,7 @@ uv sync
 cp .env.example .env                                        # set OPENAI_API_KEY
 uv run pytest                                               # offline, no tokens
 uv run python -m sales_agents web                           # demo page at http://127.0.0.1:8000
+uv run python -m sales_agents telegram                      # Telegram bot, needs the two variables above
 uv run python -m sales_agents outbound lead-0010            # terminal, you approve the draft
 uv run python -m sales_agents.eval.report                   # the results table
 ```

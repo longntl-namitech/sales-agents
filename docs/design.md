@@ -97,7 +97,7 @@ Checks each draft in code: an opt-out line is present, no prohibited promise suc
 
 ### Human approval
 
-Nothing is recorded until a human approves, edits or rejects, even when the guardrail would pass. In evals the approver is a scripted checklist: the guardrail passes, the body is at most 150 words, the subject at most 80 characters, at most one exclamation mark, and not many words in capitals. There is no LLM judge. The terminal asks you instead when you run the command line below.
+Nothing is recorded until a human approves, edits or rejects, even when the guardrail would pass. In evals the approver is a scripted checklist: the guardrail passes, the body is at most 150 words, the subject at most 80 characters, at most one exclamation mark, and not many words in capitals. There is no LLM judge. The terminal asks you instead when you run the command line below. The web page and the Telegram bot ask the same way through one shared runner, [src/sales_agents/runner.py](../src/sales_agents/runner.py), which streams the steps, pauses at the draft and resumes on the decision. The chat logic is in [src/sales_agents/telegram_front.py](../src/sales_agents/telegram_front.py).
 
 ### CRM agent
 
