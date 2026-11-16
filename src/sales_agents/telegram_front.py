@@ -1,7 +1,8 @@
 """The chat side of the Telegram front end: one chat, one run, a person deciding on the draft.
 
 It talks to a `RunManager` and to an injected `send`, so it needs no Telegram to be tested. A hot lead pauses
-at record_outreach: the draft arrives with Approve, Edit and Reject buttons. Nothing is ever sent to a lead.
+at record_outreach: the draft arrives with Approve, Edit and Reject buttons. Only private chats on the
+allow-list are answered. Nothing is ever sent to a lead.
 """
 
 from collections.abc import AsyncIterator, Awaitable, Callable
@@ -12,12 +13,26 @@ LIMIT = 4096  # Telegram's maximum message length
 
 Send = Callable[[int, str, list[tuple[str, str]] | None], Awaitable[None]]
 
+STEPS = {
+    "researcher": "Researching the lead...",
+    "qualifier": "Qualifying the lead...",
+    "writer": "Writing the draft...",
+    "crm_agent": "Updating the CRM...",
+}
+
 
 class TelegramFront:
-    def __init__(self, runner: RunManager, send: Send):
+    def __init__(self, runner: RunManager, send: Send, allowed: frozenset[int], max_runs: int = 5):
         self._runner = runner
         self._send = send
+        self._allowed = allowed
+        self._max_runs = max_runs
         self._chats: dict[int, dict] = {}
+        self._started: dict[int, int] = {}
+
+    def _answers(self, chat_id: int) -> bool:
+        """Private chats have positive ids in Telegram, groups and channels negative ones."""
+        return chat_id > 0 and chat_id in self._allowed
 
     async def _say(self, chat_id: int, text: str, buttons: list[tuple[str, str]] | None = None) -> None:
         parts = [text[i : i + LIMIT] for i in range(0, len(text), LIMIT)] or [""]
@@ -25,8 +40,19 @@ class TelegramFront:
             await self._send(chat_id, part, None)
         await self._send(chat_id, parts[-1], buttons)
 
+    async def on_start(self, chat_id: int) -> None:
+        if not self._answers(chat_id):
+            return
+        buttons = [(lead["company_name"], f"pick:{lead['lead_id']}") for lead in self._runner.leads()]
+        await self._say(chat_id, "Pick a lead to run.", buttons)
+
     async def run_lead(self, chat_id: int, lead_id: str) -> None:
         """Starts a run. A chat has one run in flight, so an earlier pending run is dropped."""
+        if not self._answers(chat_id):
+            return
+        if self._started.get(chat_id, 0) >= self._max_runs:
+            await self._say(chat_id, "Run limit reached for this chat.")
+            return
         earlier = self._chats.pop(chat_id, None)
         if earlier:
             self._runner.drop(earlier["run_id"])
@@ -35,12 +61,18 @@ class TelegramFront:
         except KeyError:
             await self._say(chat_id, f"Unknown lead {lead_id}.")
             return
+        self._started[chat_id] = self._started.get(chat_id, 0) + 1
         await self._consume(chat_id, events)
 
     async def on_callback(self, chat_id: int, data: str) -> None:
-        kind, _, run_id = data.partition(":")
+        if not self._answers(chat_id):
+            return
+        kind, _, rest = data.partition(":")
+        if kind == "pick":
+            await self.run_lead(chat_id, rest)
+            return
         state = self._chats.get(chat_id)
-        if kind not in ("a", "e", "r") or not state or state["run_id"] != run_id or not state["pending"]:
+        if kind not in ("a", "e", "r") or not state or state["run_id"] != rest or not state["pending"]:
             await self._say(chat_id, "This run is no longer waiting.")
             return
         if kind == "e":
@@ -51,6 +83,8 @@ class TelegramFront:
         await self._decide(chat_id, state, decision)
 
     async def on_text(self, chat_id: int, text: str) -> None:
+        if not self._answers(chat_id):
+            return
         state = self._chats.get(chat_id)
         if not state or not state["pending"] or not state["awaiting_edit"]:
             await self._say(chat_id, "Nothing is waiting for text. Use the buttons on the draft.")
@@ -70,6 +104,11 @@ class TelegramFront:
         async for event in events:
             if event["type"] == "started":
                 self._chats[chat_id] = {"run_id": event["run_id"], "pending": False, "awaiting_edit": False}
+                await self._say(chat_id, f"Running {event['company_name']}...")
+            elif event["type"] == "step":
+                await self._say(chat_id, STEPS.get(event["agent"], f"{event['agent']}..."))
+            elif event["type"] == "tool":
+                await self._say(chat_id, f"{event['name']}: {event['text']}")
             elif event["type"] == "approval":
                 state = self._chats[chat_id]
                 state["pending"] = True
