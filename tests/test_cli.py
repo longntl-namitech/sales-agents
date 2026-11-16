@@ -117,3 +117,64 @@ def test_the_web_command_serves_the_demo_app(monkeypatch):
     cli.main(["web", "--port", "8123"])
 
     assert served["port"] == 8123 and served["app"].title == "sales-agents demo"
+
+
+def telegram_env(monkeypatch, *, token="123:abc", chats="1"):
+    monkeypatch.setenv("SALES_AGENTS_TELEGRAM_BOT_TOKEN", token)
+    monkeypatch.setenv("SALES_AGENTS_TELEGRAM_ALLOWED_CHATS", chats)
+
+
+def test_the_telegram_command_refuses_to_start_without_an_allow_list(monkeypatch):
+    from telegram.ext import Application
+
+    from sales_agents import cli
+
+    polled = []
+    monkeypatch.setattr(Application, "run_polling", lambda self, *a, **k: polled.append(1))
+    telegram_env(monkeypatch, chats="")
+
+    with pytest.raises(SystemExit, match="ALLOWED_CHATS"):
+        cli.main(["telegram"])
+
+    assert polled == []
+
+
+def test_the_telegram_command_refuses_without_a_token(monkeypatch):
+    from telegram.ext import Application
+
+    from sales_agents import cli
+
+    polled = []
+    monkeypatch.setattr(Application, "run_polling", lambda self, *a, **k: polled.append(1))
+    telegram_env(monkeypatch, token="")
+
+    with pytest.raises(SystemExit, match="BOT_TOKEN"):
+        cli.main(["telegram"])
+
+    assert polled == []
+
+
+def test_the_telegram_command_starts_polling_with_a_token_and_an_allow_list(monkeypatch):
+    from telegram.ext import Application
+
+    from sales_agents import cli
+
+    polled = []
+    monkeypatch.setattr(Application, "run_polling", lambda self, *a, **k: polled.append(1))
+    telegram_env(monkeypatch)
+
+    cli.main(["telegram"])
+
+    assert polled == [1]
+
+
+def test_build_application_registers_start_callback_and_text_handlers():
+    from telegram.ext import CallbackQueryHandler, CommandHandler, MessageHandler
+
+    from sales_agents.config import Settings
+    from sales_agents.telegram_bot import build_application
+
+    application = build_application(Settings(telegram_bot_token="123:abc", telegram_allowed_chats="1"))
+
+    kinds = {type(handler) for handler in application.handlers[0]}
+    assert kinds == {CommandHandler, CallbackQueryHandler, MessageHandler}

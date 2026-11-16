@@ -88,7 +88,14 @@ def main(argv: list[str] | None = None) -> None:
     web = sub.add_parser("web", help="start the demo chat page")
     web.add_argument("--port", type=int, default=8000)
     web.add_argument("--crm-db", dest="web_crm_db", default="crm.sqlite3")
+    telegram = sub.add_parser("telegram", help="start the Telegram bot")
+    telegram.add_argument("--crm-db", dest="telegram_crm_db", default="crm.sqlite3")
     args = parser.parse_args(argv)
+    if args.command == "telegram":
+        from sales_agents.telegram_bot import run_bot
+
+        run_bot(args.telegram_crm_db)
+        return
     if args.command == "web":
         import uvicorn
 
