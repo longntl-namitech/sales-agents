@@ -15,10 +15,23 @@ class Settings(BaseSettings):
     openai_api_key: SecretStr | None = Field(
         default=None, validation_alias=AliasChoices("OPENAI_API_KEY")
     )
+    telegram_bot_token: SecretStr | None = None
+    telegram_allowed_chats: str = ""
 
 
 def get_settings() -> Settings:
     return Settings()
+
+
+def allowed_chat_ids(settings: Settings) -> frozenset[int]:
+    """The chats the Telegram bot answers. Empty or malformed means the bot does not start."""
+    names = [part.strip() for part in settings.telegram_allowed_chats.split(",") if part.strip()]
+    if not names:
+        raise SystemExit("SALES_AGENTS_TELEGRAM_ALLOWED_CHATS is empty. Set it to a comma-separated list of chat ids.")
+    try:
+        return frozenset(int(name) for name in names)
+    except ValueError:
+        raise SystemExit(f"SALES_AGENTS_TELEGRAM_ALLOWED_CHATS must be chat ids, got {', '.join(names)!r}.") from None
 
 
 def get_callbacks(settings: Settings) -> list:
