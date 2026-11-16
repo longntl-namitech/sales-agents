@@ -35,6 +35,11 @@ def build_application(settings: Settings, front: TelegramFront | None = None, *,
             await update.callback_query.answer()
         except TelegramError:
             pass  # a tap that waited behind a long run is too old to answer, but it still counts
+        if update.callback_query.data.startswith(("a:", "r:")):
+            try:
+                await update.callback_query.edit_message_reply_markup(reply_markup=None)
+            except TelegramError:
+                pass  # the buttons are already gone
         await front.on_callback(update.effective_chat.id, update.callback_query.data)
 
     async def text(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:

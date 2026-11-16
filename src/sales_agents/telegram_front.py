@@ -5,7 +5,9 @@ at record_outreach: the draft arrives with Approve, Edit and Reject buttons. Onl
 allow-list are answered. Nothing is ever sent to a lead.
 """
 
+import json
 import logging
+import re
 from collections.abc import AsyncIterator, Awaitable, Callable
 
 from sales_agents.runner import RunManager
@@ -121,7 +123,7 @@ class TelegramFront:
         elif event["type"] == "step":
             await self._say(chat_id, STEPS.get(event["agent"], f"{event['agent']}..."))
         elif event["type"] == "tool":
-            await self._say(chat_id, f"{event['name']}: {event['text']}")
+            await self._say(chat_id, _tool_line(event["name"], event["text"]))
         elif event["type"] == "approval":
             state = self._chats[chat_id]
             state["pending"] = True
@@ -130,6 +132,20 @@ class TelegramFront:
             await self._say(chat_id, event["draft_text"], buttons)
         elif event["type"] == "result":
             await self._say(chat_id, _result_line(event["record"]))
+
+
+def _tool_line(name: str, text: str) -> str:
+    """A short line for a CRM tool result. A reviewer's edit puts a note before the tool's own answer."""
+    blocked = re.search(r"(?:^|\n)(BLOCKED.*)", text, re.S)
+    if blocked:
+        return blocked.group(1)
+    if name == "record_outreach":
+        return "Guardrail passed. The draft is recorded in the mock CRM."
+    try:
+        record = json.loads(text)
+    except ValueError:
+        return text
+    return f"CRM: saved as {str(record.get('label', '?')).upper()}.\n{record.get('notes') or ''}".rstrip()
 
 
 def _result_line(record: dict | None) -> str:

@@ -176,6 +176,27 @@ def test_a_group_chat_is_ignored():
     assert sent == []
 
 
+def test_crm_results_are_short_lines_not_raw_json():
+    front, sent, _ = drafted()
+    asyncio.run(front.on_callback(CHAT, data(sent, "Approve")))
+
+    said = [text for _, text, _ in sent]
+
+    assert any(t.startswith("CRM: saved as HOT.") for t in said)
+    assert "Guardrail passed. The draft is recorded in the mock CRM." in said
+    assert not any(t.startswith(("upsert_lead:", "record_outreach:")) or '{"lead_id"' in t for t in said)
+
+
+def test_a_blocked_draft_shows_the_guardrail_reason():
+    front, sent, store = drafted()
+
+    asyncio.run(front.on_callback(CHAT, data(sent, "Edit")))
+    asyncio.run(front.on_text(CHAT, "Hello there"))
+
+    assert sent[-2][1].startswith("BLOCKED by the guardrail")
+    assert sent[-1][1] == "Result: hot - no outreach recorded."
+
+
 def test_a_run_that_fails_tells_the_chat_and_frees_it():
     async def boom():
         yield {"type": "started", "run_id": "r1", "lead_id": "x", "company_name": "X"}
